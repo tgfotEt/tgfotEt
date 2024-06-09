@@ -1,5 +1,7 @@
 {
-    "problems": [
+    "title": "Problem Set 1",
+    "description": "This is a simple problem set.",
+    "questions": [
         {
             "question":"Chicago is a",
             "choices":[

@@ -19,8 +19,8 @@ export const UserQBankPage = ({ setCurrentPage }) => {
         <div>
             <button onClick={() => setCurrentPage('createqb')}>Create your own Question Bank</button>
             <div>
-                {userQBank.map((qbank) => (
-                    <div key={qbank.storageid}>
+                {userQBank.map((qbank, index) => (
+                    <div key={index}>
                         <h2>{qbank.title}</h2>
                     </div>
                 ))}
