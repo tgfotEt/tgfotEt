@@ -7,11 +7,11 @@ export const ProfileMenuContainer = ({setIsLoggedIn, setCurrentPage}) => {
     const profilePicture = auth.currentUser!.photoURL!;
     return (
         <>
-            <button className='m-3 fixed z-50 top-0 right-0 rounded-full' onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}>
+            <button className='m-3 fixed z-50 top-0 right-0 rounded-full' onClick={() => setIsProfileMenuOpen(true)}>
                 <img src={profilePicture} alt="profile" className='w-8 h-8 rounded-full' /> 
             </button>
             { isProfileMenuOpen &&
-                <ProfileMenu setIsLoggedIn={setIsLoggedIn} setCurrentPage={setCurrentPage} />
+                <ProfileMenu setIsLoggedIn={setIsLoggedIn} setCurrentPage={setCurrentPage} setIsProfileMenuOpen={setIsProfileMenuOpen} />
             }
         </>
     );

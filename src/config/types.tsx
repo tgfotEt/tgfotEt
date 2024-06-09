@@ -37,6 +37,7 @@ export type QuestionBankInfo = {
 export type QuestionProgress = {
     solved: number;
     fingerprint: string;
+    individualProgress?: number[];
 }
 
 export type QuestionBankProgress = {

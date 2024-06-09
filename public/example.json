@@ -1,0 +1,25 @@
+{
+    "problems": [
+        {
+            "question":"Chicago is a",
+            "choices":[
+                "city",
+                "state",
+                "country",
+                "continent"
+            ],
+            "answer":1
+        },
+        {
+            "question":"The United States is a",
+            "answer":"country"
+        },
+        {
+            "sentence":"The United States is a country."
+        },
+        {
+            "source":"美國是一個國家。",
+            "target":"The United States is a country."
+        }
+    ]
+}

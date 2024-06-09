@@ -13,7 +13,7 @@ export const Content = () => {
             { !isLoggedIn 
                 ? <LogIn setIsLoggedIn={setIsLoggedIn} /> 
                 : <>
-                    <PageContainer currentPage={currentPage} />
+                    <PageContainer currentPage={currentPage} setCurrentPage={setCurrentPage} />
                     <SidebarContainer setCurrentPage={setCurrentPage} />
                     <ProfileMenuContainer setIsLoggedIn={setIsLoggedIn} setCurrentPage={setCurrentPage} />
                 </>
