@@ -1,6 +1,6 @@
 {
-    "title": "Problem Set 1",
-    "description": "This is a simple problem set.",
+    "title": "Problem Set 2",
+    "description": "This is another simple problem set.",
     "questions": [
         {
             "question":"Chicago is a",
@@ -10,7 +10,7 @@
                 "country",
                 "continent"
             ],
-            "answer":1
+            "answer":[1, 2]
         },
         {
             "question":"The United States is a",

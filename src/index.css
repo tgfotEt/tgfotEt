@@ -6,4 +6,10 @@
     .profile-menu-btn {
         @apply block w-full text-left px-4 py-2 rounded-md hover:bg-gray-600; 
     }
+    .sidebar-btn {
+        @apply block w-full text-left px-4 py-2 rounded-md hover:bg-gray-800;
+    }
+    button {
+        outline: none;
+    }
 }

@@ -78,10 +78,14 @@ export const isQuestionBank = (obj: any): boolean => {
         obj['questions'].length > 0 && obj['questions'].length <= 500;
 }
 
-export type QuestionBankInfo = {
+export type QuestionBankMetaData = {
     title: string;
     description: string;
-    fingerprint: string;
+    createdAt: Date;
+    updatedAt: Date;
+    authorid: string;
+    authorname: string;
+    downloads: number;
 };
 
 export type QuestionProgress = {
@@ -92,5 +96,10 @@ export type QuestionProgress = {
 
 export type QuestionBankProgress = {
     qbid: string;
+    lastUsed: Date;
     progress: QuestionProgress[];
+};
+
+export type UserData = {
+    qbp: QuestionBankProgress[];
 };
