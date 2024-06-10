@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { auth } from '../config/firebase';
+import * as ls from '../config/ls';
 import { LogIn } from './LogIn';
 import { PageContainer } from './PageContainer';
 import { SidebarContainer } from './SidebarContainer';
@@ -10,8 +11,9 @@ export const Content = () => {
     const [currentPage, setCurrentPage] = useState('about');
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        auth.onAuthStateChanged(user => {
+        auth.onAuthStateChanged(async (user) => {
             if (user) {
+                await ls.fetchData(user.uid);
                 setIsLoggedIn(true);
             } else {
                 setIsLoggedIn(false);

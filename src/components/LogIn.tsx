@@ -1,7 +1,7 @@
 import { auth, googleProvider, db } from '../config/firebase';
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-
+import * as ls from '../config/ls';
 export const LogIn = ({setIsLoggedIn}) => {
     const signInWithGoogle = async () => {
         try {
@@ -26,10 +26,10 @@ export const LogIn = ({setIsLoggedIn}) => {
         const userId = auth.currentUser!.uid;
         const userRef = doc(db, 'users', userId);
         const UserData = {
-            qbp: []
+            qb: {}
         };
         try {
-            const snapshot = await getDoc(userRef);
+            const snapshot = await getDoc(userRef); console.log("reading user data");
             if (snapshot.exists()) {
                 setIsLoggedIn(true);
                 return;
@@ -42,6 +42,7 @@ export const LogIn = ({setIsLoggedIn}) => {
             return;
         }
         setIsLoggedIn(true);
+        ls.setData(UserData);
     };
 
     return (

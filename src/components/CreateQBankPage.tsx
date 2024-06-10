@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { doc, collection, addDoc, setDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
+import { Timestamp } from 'firebase/firestore';
 import { auth, db, storage } from '../config/firebase';
 import { isQuestionBank, QuestionBank, QuestionBankMetaData } from '../config/types';
 export const CreateQBankPage = ({ setCurrentPage, toEdit }) => {
@@ -14,15 +15,15 @@ export const CreateQBankPage = ({ setCurrentPage, toEdit }) => {
             const docData: QuestionBankMetaData = {
                 title: fileDataTyped.title,
                 description: fileDataTyped.description,
-                createdAt: new Date(),
-                updatedAt: new Date(),
+                createdAt: Timestamp.now(),
+                updatedAt: Timestamp.now(),
                 authorid: auth.currentUser!.uid,
                 authorname: auth.currentUser!.displayName!,
                 downloads: 0
             };
             if (toEdit) {
                 const qbankDoc = doc(db, 'qbank', toEdit);
-                const snapshot = await getDoc(qbankDoc);
+                const snapshot = await getDoc(qbankDoc); console.log("reading qbank data");
                 if (!snapshot.exists()) throw new Error('Document does not exist');
                 const createdAt = snapshot.data()!.createdAt;
                 docData.createdAt = createdAt;

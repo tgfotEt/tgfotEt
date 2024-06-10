@@ -1,3 +1,4 @@
+import { Timestamp } from '@firebase/firestore-types';
 export type MCQ = {
     question: string;
     choices: string[];
@@ -81,8 +82,8 @@ export const isQuestionBank = (obj: any): boolean => {
 export type QuestionBankMetaData = {
     title: string;
     description: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: Timestamp;
+    updatedAt: Timestamp;
     authorid: string;
     authorname: string;
     downloads: number;

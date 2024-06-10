@@ -9,7 +9,7 @@ export const UserQBankPage = ({ setCurrentPage }) => {
     const [userQBank, setUserQBank] = useState<[DocumentData, string][]>([]);
     useEffect(() => {
         const getQBank = async () => {
-            const qbankSnapshot = await getDocs(qbankQuery);
+            const qbankSnapshot = await getDocs(qbankQuery); console.log("reading qbank data");
             const qbankData = qbankSnapshot.docs.map((doc) => ([doc.data(), doc.id] as [DocumentData, string]));
             setUserQBank(qbankData);
         };
