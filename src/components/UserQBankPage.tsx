@@ -21,7 +21,7 @@ export const UserQBankPage = ({ setCurrentPage }) => {
             <div>
                 {userQBank.map((qbank, index) => (
                     <div key={index}>
-                        <button className='hover:bg-gray-700' onClick={() => setCurrentPage('editqb ' + qbank[1])}>
+                        <button className='hover:bg-gray-700' onClick={() => setCurrentPage('qbdetail ' + qbank[1])}>
                             <h2>{qbank[0].title}</h2>
                             <p>{qbank[0].description}</p>
                         </button>

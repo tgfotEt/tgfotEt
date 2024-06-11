@@ -17,7 +17,7 @@ export const QBankPage = ({ setCurrentPage }) => {
             if (qBankData.length < lim) setAllLoaded(true);
             setQBankList(qBankList.concat(qBankData));
         } catch (error) {
-            console.error(error);
+            console.warn(error);
             alert('Failed to fetch QBank list. Please try again later');
         }
     };

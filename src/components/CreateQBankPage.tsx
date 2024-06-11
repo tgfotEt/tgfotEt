@@ -35,7 +35,7 @@ export const CreateQBankPage = ({ setCurrentPage, toEdit }) => {
             const storageRef = ref(storage, 'qbank/' + toEdit);
             await uploadBytes(storageRef, file);
         } catch (error) {
-            console.error(error);
+            console.warn(error);
             alert('Failed to upload file. Please try again later');
         }
         setFile(null);
@@ -43,8 +43,16 @@ export const CreateQBankPage = ({ setCurrentPage, toEdit }) => {
     };
     return (
         <div>
-            <button onClick={() => setCurrentPage('userqb')}>Back</button>
-            { toEdit ? <h1>Edit your Question Bank</h1> : <h1>Create your own Question Bank</h1> }
+            { toEdit 
+                ? <>
+                    <button onClick={() => setCurrentPage('qbdetail ' + toEdit)}>Back</button>
+                    <h1>Edit your Question Bank</h1>
+                </>
+                : <>
+                    <button onClick={() => setCurrentPage('userqb')}>Back</button>
+                    <h1>Create your own Question Bank</h1>
+                </>
+            }
             <input type='file' accept='.json' onChange={(e) => setFile((e.target as HTMLInputElement).files![0])} />
             <button onClick={uploadFile}>Upload</button>
         </div>

@@ -13,7 +13,7 @@ export const Content = () => {
     useEffect(() => {
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                await ls.fetchData(user.uid);
+                await ls.initQBank(user.uid);
                 setIsLoggedIn(true);
             } else {
                 setIsLoggedIn(false);

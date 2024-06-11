@@ -1,4 +1,5 @@
-import { Timestamp } from '@firebase/firestore-types';
+import { Timestamp } from 'firebase/firestore';
+
 export type MCQ = {
     question: string;
     choices: string[];
@@ -96,11 +97,11 @@ export type QuestionProgress = {
 };
 
 export type QuestionBankProgress = {
-    qbid: string;
-    lastUsed: Date;
+    title: string;
+    lastUsed: Timestamp;
     progress: QuestionProgress[];
 };
 
 export type UserData = {
-    qbp: QuestionBankProgress[];
+    qb: Record<string, QuestionBankProgress>;
 };
