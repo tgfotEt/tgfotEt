@@ -5,33 +5,30 @@ import { LogIn } from './LogIn';
 import { PageContainer } from './PageContainer';
 import { SidebarContainer } from './SidebarContainer';
 import { ProfileMenuContainer } from './ProfileMenuContainer';
+import { LoadingOverlay } from './LoadingOverlay';
 
 export const Content = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [currentPage, setCurrentPage] = useState('about');
-    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                await ls.initQBank(user.uid);
                 setIsLoggedIn(true);
             } else {
                 setIsLoggedIn(false);
             }
-            setIsLoading(false);
         });
     }, []);
     return (
-        <>
-            { isLoading 
-                ? <div>Loading...</div>
-                : isLoggedIn 
-                ? <> <PageContainer currentPage={currentPage} setCurrentPage={setCurrentPage} />
-                    <SidebarContainer setCurrentPage={setCurrentPage} />
-                    <ProfileMenuContainer setIsLoggedIn={setIsLoggedIn} setCurrentPage={setCurrentPage} /> </>
+        <div className='text-gray-100 font-mono'> 
+            { isLoggedIn 
+                ? <LoadingOverlay func={ls.initQBank} >
+                    <PageContainer />
+                    <SidebarContainer />
+                    <ProfileMenuContainer setIsLoggedIn={setIsLoggedIn} />
+                </LoadingOverlay>
                 : <LogIn setIsLoggedIn={setIsLoggedIn} /> 
             }
-        </>
+        </div>
     );
 };
 

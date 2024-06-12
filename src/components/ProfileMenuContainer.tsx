@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { auth } from '../config/firebase';
 import { ProfileMenu } from './ProfileMenu';
 
-export const ProfileMenuContainer = ({setIsLoggedIn, setCurrentPage}) => {
+export const ProfileMenuContainer = ({ setIsLoggedIn }) => {
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const profilePicture = auth.currentUser!.photoURL!;
     return (
@@ -11,7 +11,7 @@ export const ProfileMenuContainer = ({setIsLoggedIn, setCurrentPage}) => {
                 <img src={profilePicture} alt="profile" className='w-8 h-8 rounded-full' /> 
             </button>
             { isProfileMenuOpen &&
-                <ProfileMenu setIsLoggedIn={setIsLoggedIn} setCurrentPage={setCurrentPage} setIsProfileMenuOpen={setIsProfileMenuOpen} />
+                <ProfileMenu setIsLoggedIn={setIsLoggedIn} setIsProfileMenuOpen={setIsProfileMenuOpen} />
             }
         </>
     );

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Sidebar } from './Sidebar';
 
-export const SidebarContainer = ({setCurrentPage}) => {
+export const SidebarContainer = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
@@ -10,7 +10,7 @@ export const SidebarContainer = ({setCurrentPage}) => {
                 <img src={"/src/assets/nav.svg"} alt="nav" className='w-8 h-8' />
             </button>
             { isSidebarOpen &&
-                <Sidebar setCurrentPage={setCurrentPage} setIsSidebarOpen={setIsSidebarOpen} />
+                <Sidebar setIsSidebarOpen={setIsSidebarOpen} />
             }
         </>
     );

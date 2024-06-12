@@ -1,76 +1,70 @@
-import { useState, useEffect } from 'react';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
 import { QuestionBankMetaData } from '../config/types';
+import { LoadingOverlay } from './LoadingOverlay';
 import * as ls from '../config/ls';
 
-export const QBankDetailsPage = ({ setCurrentPage, qBankId }) => {
-    const [qBankMetaData, setQBankMetaData] = useState<QuestionBankMetaData|null>(null);
+export const QBankDetailsPage = ({ qBankId }) => {
+    const [qBankMetaData, setQBankMetaData] = useState<QuestionBankMetaData>();
+    const [isLoading, setIsLoading] = useState(false);
+    const [_, setCurrentPage] = useSearchParams();
     const downloadQBank = async () => {
-        try {
-            ls.downloadQBank(qBankId, auth.currentUser!.uid);
-        } catch (error) {
-            console.warn(error);
-            alert('Failed to download. Please try again later');
-        }
-        setCurrentPage('qbank');
+        await ls.downloadSyncQBank(qBankId);
+        setIsLoading(false);
     };
 
     const removeQBank = async () => {
-        try {
-            await ls.removeSyncQBank(qBankId, auth.currentUser!.uid);
-        } catch (error) {
-            console.warn(error);
-            alert('Failed to delete. Please try again later');
-        }
-        setCurrentPage('qbank');
-    }
+        await ls.removeSyncQBank(qBankId);
+        setIsLoading(false);
+    };
 
-    useEffect(() => {
-        const getQBankMetaData = async () => {
-            try {
-                const qBankDoc = doc(db, 'qbank', qBankId);
-                const snapshot = await getDoc(qBankDoc); console.log("reading qbank data");
-                if (!snapshot.exists()) {
-                    alert('Document does not exist, removing from saved');
-                    ls.removeQBank(qBankId);
-                    setCurrentPage('qbank');
-                    return;
-                }
-                setQBankMetaData(snapshot.data() as QuestionBankMetaData);
-            } catch (error) {
-                console.warn(error);
-                alert('Failed to fetch data. Please try again later');
-                setCurrentPage('qbank');
-            }
+    const getQBankMetaData = async () => {
+        const qBankDoc = doc(db, 'qbank', qBankId);
+        const snapshot = await getDoc(qBankDoc); console.log("reading qbank data");
+        if (!snapshot.exists()) {
+            await ls.removeSyncQBank(qBankId);
+            throw new Error('Document does not exist, removing from saved');
         }
-        getQBankMetaData();
-    }, []);
+        setQBankMetaData(snapshot.data() as QuestionBankMetaData);
+    }
 
     return (
         <div className='py-20 flex flex-row gap-2 justify-center align-middle h-full'>
-            { qBankMetaData ?
-                <> 
-                    <div className='grid [grid-template-rows:auto_auto_auto_auto_1fr] gap-2 [&>*]:bg-gray-700 [&>*]:py-2 [&>*]:rounded-md align-middle w-1/2'>
-                        <div className='text-3xl py-4'>{qBankMetaData.title}</div>
-                        <div>By: {qBankMetaData.authorname}</div>
-                        <div>Created on {qBankMetaData.createdAt.toDate().toDateString()}</div>
-                        <div>Last updated on {qBankMetaData.updatedAt.toDate().toDateString()}</div>
-                        <div>{qBankMetaData.description}</div>
-                    </div>
-                    <div className='grid gap-2 [&>*]:bg-gray-700 align-middle w-1/5 [&>*]:w-full [&>*]:rounded-md'>
-                        { Object.keys(ls.getData().qb).includes(qBankId) 
-                            ? <button onClick={removeQBank}>Remove from Saved</button>
-                            : <button onClick={downloadQBank}>Add to Saved</button>
-                        }
-                        { auth.currentUser!.uid === qBankMetaData.authorid && 
-                            <button onClick={() => setCurrentPage('editqb ' + qBankId)}>Edit</button>
-                        }
-                        <button onClick={() => setCurrentPage('qbank')}>Back</button>
-                    </div>
-                </>
-                : <div>Loading...</div>
-            }
+            <LoadingOverlay func={ getQBankMetaData } > 
+                { qBankMetaData &&
+                    <>
+                        <div className='grid [grid-template-rows:auto_auto_auto_auto_1fr] gap-2 [&>div]:bg-gray-700 [&>div]:py-2 [&>div]:rounded-md align-middle w-1/2'>
+                            <div className='text-3xl py-4'>{qBankMetaData.title}</div>
+                            <div>By: {qBankMetaData.authorname}</div>
+                            <div>Created on {qBankMetaData.createdAt.toDate().toDateString()}</div>
+                            <div>Last updated on {qBankMetaData.updatedAt.toDate().toDateString()}</div>
+                            <div>{qBankMetaData.description}</div>
+                        </div>
+                        <div className='grid gap-2 [&>button]:bg-gray-700 align-middle w-1/5 [&>button]:w-full [&>button]:rounded-md'>
+                            { Object.keys(ls.getData().qb).includes(qBankId) 
+                                ? (
+                                    <>
+                                        <button onClick={() => setIsLoading(true)}>Remove from Saved</button>
+                                        <LoadingOverlay func={removeQBank} state={isLoading}> </LoadingOverlay>
+                                    </>
+                                )
+                                : (
+                                    <>
+                                        <button onClick={() => setIsLoading(true)}>Download</button>
+                                        <LoadingOverlay func={downloadQBank} state={isLoading}> </LoadingOverlay>
+                                    </>
+                                )
+                            }
+                            { auth.currentUser!.uid === qBankMetaData.authorid && 
+                                <button onClick={() => setCurrentPage({p:'editqb',id:qBankId})}>Edit</button>
+                            }
+                            <button onClick={() => setCurrentPage({p:'qbank'})}>Back</button>
+                        </div>
+                    </>
+                }
+            </LoadingOverlay>
         </div>
     );
 };
