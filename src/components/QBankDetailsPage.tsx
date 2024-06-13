@@ -10,6 +10,8 @@ export const QBankDetailsPage = ({ qBankId }) => {
     const [qBankMetaData, setQBankMetaData] = useState<QuestionBankMetaData>();
     const [isLoading, setIsLoading] = useState(false);
     const [_, setCurrentPage] = useSearchParams();
+    const startedUsing = ls.hasQBank(qBankId) && ls.getData().qb[qBankId].progress.length !== 0;
+
     const downloadQBank = async () => {
         await ls.downloadSyncQBank(qBankId);
         setIsLoading(false);
@@ -28,6 +30,9 @@ export const QBankDetailsPage = ({ qBankId }) => {
             throw new Error('Document does not exist, removing from saved');
         }
         setQBankMetaData(snapshot.data() as QuestionBankMetaData);
+        if(ls.hasQBank(qBankId) && ls.getTitle(qBankId) !== snapshot.data().title) {
+            await ls.setTitle(qBankId, snapshot.data().title);
+        }
     }
 
     return (
@@ -43,16 +48,27 @@ export const QBankDetailsPage = ({ qBankId }) => {
                             <div>{qBankMetaData.description}</div>
                         </div>
                         <div className='grid gap-2 [&>button]:bg-gray-700 align-middle w-1/5 [&>button]:w-full [&>button]:rounded-md'>
-                            { Object.keys(ls.getData().qb).includes(qBankId) 
+                            { ls.hasQBank(qBankId)
                                 ? (
                                     <>
+                                        { startedUsing 
+                                            ? (
+                                                <>
+                                                    <button>Continue</button>
+                                                    <button>Restart</button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <button>Start</button>
+                                                </>
+                                            )
+                                        }
                                         <button onClick={() => setIsLoading(true)}>Remove from Saved</button>
                                         <LoadingOverlay func={removeQBank} state={isLoading}> </LoadingOverlay>
                                     </>
-                                )
-                                : (
+                                ) : (
                                     <>
-                                        <button onClick={() => setIsLoading(true)}>Download</button>
+                                        <button onClick={() => setIsLoading(true)}>Add to Saved</button>
                                         <LoadingOverlay func={downloadQBank} state={isLoading}> </LoadingOverlay>
                                     </>
                                 )

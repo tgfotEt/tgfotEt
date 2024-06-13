@@ -32,19 +32,14 @@ export async function fetchData() {
     });
 }
 
-export function addQBank(qBankId: string, title: string) {
+export async function addSyncQBank(qBankId: string, title: string) {
     const data = getData();
     data.qb[qBankId] = {
         title: title,
         lastUsed: Timestamp.now(),
         progress: []
     };
-    setData(data);
-}
-
-export async function addSyncQBank(qBankId: string, title: string, ) {
-    addQBank(qBankId, title);
-    await syncData();
+    setSyncData(data);
 }
 
 export async function initQBank() {
@@ -59,20 +54,15 @@ export async function initQBank() {
     }
 }
 
-export function removeQBank(qBankId: string) {
+export async function removeSyncQBank(qBankId: string) {
     const data = getData();
     delete data.qb[qBankId];
-    setData(data);
-}
-
-export async function removeSyncQBank(qBankId: string, ) {
-    removeQBank(qBankId);
+    await setSyncData(data);
     const docRef = doc(db, 'qbank', qBankId);
     const snapshot = await getDoc(docRef);
     if (snapshot.exists()) {
         await updateDoc(docRef, { downloads: snapshot.data()!.downloads - 1 });
     }
-    await syncData();
 }
 
 export async function downloadSyncQBank(qBankId: string, ) {
@@ -82,4 +72,18 @@ export async function downloadSyncQBank(qBankId: string, ) {
     const qBankMetaData = snapshot.data() as QuestionBankMetaData;
     await updateDoc(qBankDoc, { downloads: qBankMetaData.downloads + 1 });
     addSyncQBank(qBankId, qBankMetaData.title);
+}
+
+export function getTitle(qBankId: string) {
+    return getData().qb[qBankId].title;
+}
+
+export async function setTitle(qBankId: string, title: string) {
+    const data = getData();
+    data.qb[qBankId].title = title;
+    await setSyncData(data);
+}
+
+export function hasQBank(qBankId: string) {
+    return Object.keys(getData().qb).includes(qBankId);
 }

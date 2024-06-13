@@ -29,7 +29,9 @@ export const CreateQBankPage = ({ toEdit }) => {
             const snapshot = await getDoc(qbankDoc); console.log("reading qbank data");
             if (!snapshot.exists()) throw new Error('Document does not exist');
             const createdAt = snapshot.data()!.createdAt;
+            const downloadCount = snapshot.data()!.downloads;
             docData.createdAt = createdAt;
+            docData.downloads = downloadCount;
             await setDoc(qbankDoc, docData);
         } else {
             const qbankDoc = await addDoc(collection(db, 'qbank'), docData);

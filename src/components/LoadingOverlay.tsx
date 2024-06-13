@@ -7,8 +7,9 @@ export const LoadingOverlay = ({ func, state=true, children }) => {
         async function load() {
             try {
                 await func();
-            } catch (error) {
-                setError(JSON.stringify(error));
+            } catch (error: any) {
+                setError(error.message);
+                console.error(error);
             }
             setIsLoading(false);
         }
@@ -29,6 +30,7 @@ export const LoadingOverlay = ({ func, state=true, children }) => {
                     <div className='bg-red-700 p-6 rounded-lg'>
                         <h1 className='text-2xl'>Error</h1>
                         <p>{error}</p>
+                        <button onClick={() => setError("")}>Close</button>
                     </div>
                 </div>
                 : children
@@ -37,3 +39,23 @@ export const LoadingOverlay = ({ func, state=true, children }) => {
     );
 };
 
+export const ConfirmOverlay = ({ prompt, confirmText = 'OK', cancelText = 'Cancel', onConfirm, onCancel, state=true }) => {
+    const [isOpen, setIsOpen] = useState(true);
+    return (
+        <>
+            { (isOpen && state)
+                ? 
+                <div className='fixed inset-0 bg-black bg-opacity-50 z-[1000] flex justify-center items-center'>
+                    <div className='bg-gray-700 p-6 rounded-lg'>
+                        <h1 className='text-2xl'>{prompt}</h1>
+                        <div className='flex gap-2'>
+                            <button onClick={() => { setIsOpen(false); onCancel(); }}>{cancelText}</button>
+                            <button onClick={() => { setIsOpen(false); onConfirm(); }}>{confirmText}</button>
+                        </div>
+                    </div>
+                </div>
+                : null
+            }
+        </>
+    );
+};
