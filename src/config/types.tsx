@@ -77,7 +77,8 @@ export const isQuestionBank = (obj: any): boolean => {
         obj['description'].length <= 1000 &&
         Array.isArray(obj['questions']) &&
         obj['questions'].every((question: any) => isQuestion(question)) &&
-        obj['questions'].length > 0 && obj['questions'].length <= 500;
+        obj['questions'].length > 0 && obj['questions'].length <= 500 &&
+        JSON.stringify(obj).length <= 100000;
 }
 
 export type QuestionBankMetaData = {
@@ -91,8 +92,9 @@ export type QuestionBankMetaData = {
 };
 
 export type QuestionProgress = {
+    hash: string;
+    count: number;
     solved: number;
-    fingerprint: string;
     individualProgress?: number[];
 };
 

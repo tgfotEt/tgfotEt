@@ -1,7 +1,7 @@
 import { db, auth } from './firebase';
 import { doc, getDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
-import { UserData, QuestionBankMetaData } from './types';
-
+import { UserData, QuestionBankMetaData, isMCQ, isFRQ, isFillIn, isTranslate, isMixed, FillIn, Mixed, QuestionProgress, Question } from './types';
+import hash from 'object-hash';
 export function getData(): UserData {
     return JSON.parse(localStorage.getItem('data') || '{}') as UserData;
 }
@@ -54,6 +54,12 @@ export async function initQBank() {
     }
 }
 
+export async function restartQBank(qBankId: string) {
+    const data = getData();
+    data.qb[qBankId].progress = [];
+    await setSyncData(data);
+}
+
 export async function removeSyncQBank(qBankId: string) {
     const data = getData();
     delete data.qb[qBankId];
@@ -86,4 +92,42 @@ export async function setTitle(qBankId: string, title: string) {
 
 export function hasQBank(qBankId: string) {
     return Object.keys(getData().qb).includes(qBankId);
+}
+
+export function initProgress(questionContent: Question): QuestionProgress {
+    if(isMCQ(questionContent) || isFRQ(questionContent) || isTranslate(questionContent))
+        return { hash: hash(questionContent), count: 0, solved: 0 };
+    if(isFillIn(questionContent))
+        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: Array((questionContent as FillIn).sentence.split(' ').length).fill(false) };
+    if(isMixed(questionContent))
+        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: Array((questionContent as Mixed).subquestions.length).fill(false) };
+    throw new Error('Invalid question type');
+}
+
+export async function initProgressAll(qBankId: string, questions: Question[]) {
+    const data = getData();
+    data.qb[qBankId].progress = questions.map((question) => initProgress(question));
+    setSyncData(data);
+}
+
+export async function setProgress(qBankId: string, progress: QuestionProgress[]) {
+    const data = getData();
+    data.qb[qBankId].progress = progress;
+    await setSyncData(data);
+}
+
+export function updateProgress(qBankId: string, hash: string, solved: number, individualProgress?: number[], addCount=true) {
+    const data = getData();
+    const progress = data.qb[qBankId].progress;
+    const index = progress.findIndex((question) => question.hash === hash);
+    if (index === -1) throw new Error('Question not found');
+    progress[index] = {
+        hash: hash, 
+        count: addCount ? progress[index].count + 1 : progress[index].count,
+        solved: Math.max(solved, progress[index].solved),
+        individualProgress: individualProgress 
+            ? progress[index].individualProgress!.map((value, i) => individualProgress![i] || value) 
+            : undefined
+    };
+    setData(data);
 }

@@ -3,12 +3,13 @@ import { useSearchParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
 import { QuestionBankMetaData } from '../config/types';
-import { LoadingOverlay } from './LoadingOverlay';
+import { LoadingOverlay, ConfirmOverlay } from './LoadingOverlay';
 import * as ls from '../config/ls';
 
 export const QBankDetailsPage = ({ qBankId }) => {
     const [qBankMetaData, setQBankMetaData] = useState<QuestionBankMetaData>();
     const [isLoading, setIsLoading] = useState(false);
+    const [confirmRestart, setConfirmRestart] = useState(false);
     const [_, setCurrentPage] = useSearchParams();
     const startedUsing = ls.hasQBank(qBankId) && ls.getData().qb[qBankId].progress.length !== 0;
 
@@ -20,6 +21,15 @@ export const QBankDetailsPage = ({ qBankId }) => {
     const removeQBank = async () => {
         await ls.removeSyncQBank(qBankId);
         setIsLoading(false);
+    };
+
+    const setCorePage = () => {
+        setCurrentPage({p:'core', id:qBankId});
+    }
+
+    const restartQBank = async () => {
+        await ls.restartQBank(qBankId);
+        setCorePage();
     };
 
     const getQBankMetaData = async () => {
@@ -54,12 +64,17 @@ export const QBankDetailsPage = ({ qBankId }) => {
                                         { startedUsing 
                                             ? (
                                                 <>
-                                                    <button>Continue</button>
-                                                    <button>Restart</button>
+                                                    <button onClick={setCorePage}>Continue</button>
+                                                    <button onClick={() => setConfirmRestart(true)}>Restart</button>
+                                                    <ConfirmOverlay
+                                                        prompt='Are you sure you want to restart?'
+                                                        onConfirm={() => { restartQBank }}
+                                                        state={confirmRestart}
+                                                    />
                                                 </>
                                             ) : (
                                                 <>
-                                                    <button>Start</button>
+                                                    <button onClick={setCorePage}>Start</button>
                                                 </>
                                             )
                                         }
