@@ -1,0 +1,16 @@
+{
+    "title": "Fill In The Blank",
+    "description": "This is a simple fill in the blank problem set.",
+    "questions": [
+        {
+            "sentence":"The United States is a country."
+        },
+        {
+            "sentence":"The quick brown fox jumps over the lazy dog."
+        },
+        {
+            "sentence":"This is a sentence to test the system."
+        }
+    ]
+}
+

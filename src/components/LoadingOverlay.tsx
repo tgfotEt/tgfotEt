@@ -11,7 +11,7 @@ export const LoadingOverlay = ({ func, state=true, children }) => {
                 setError(error.message);
                 console.error(error);
             }
-            setIsLoading(false);
+            setTimeout(()=>setIsLoading(false), 10);
         }
         if (state) load();
     }, [state]);
@@ -49,8 +49,8 @@ export const ConfirmOverlay = ({ prompt, confirmText = 'OK', cancelText = 'Cance
                     <div className='bg-gray-700 p-6 rounded-lg'>
                         <h1 className='text-2xl'>{prompt}</h1>
                         <div className='flex gap-2'>
-                            { !alert && <button onClick={() => { setIsOpen(false); onCancel(); }}>{cancelText}</button> }
-                            <button onClick={() => { setIsOpen(false); onConfirm(); }}>{confirmText}</button>
+                            { !alert && <button onClick={() => { onCancel(); setIsOpen(false); }}>{cancelText}</button> }
+                            <button onClick={() => { onConfirm(); setIsOpen(false); }}>{confirmText}</button>
                         </div>
                     </div>
                 </div>

@@ -29,6 +29,7 @@ export const QBankDetailsPage = ({ qBankId }) => {
 
     const restartQBank = async () => {
         await ls.restartQBank(qBankId);
+        console.log('restarting');
         setCorePage();
     };
 
@@ -68,7 +69,7 @@ export const QBankDetailsPage = ({ qBankId }) => {
                                                     <button onClick={() => setConfirmRestart(true)}>Restart</button>
                                                     <ConfirmOverlay
                                                         prompt='Are you sure you want to restart?'
-                                                        onConfirm={() => { restartQBank }}
+                                                        onConfirm={ restartQBank }
                                                         state={confirmRestart}
                                                     />
                                                 </>

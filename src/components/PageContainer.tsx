@@ -17,7 +17,7 @@ export const PageContainer = () => {
             { currentPage === 'userqb' && <UserQBankPage /> }
             { currentPage === 'createqb' && <CreateQBankPage toEdit={''} /> }
             { currentPage === 'editqb' && <CreateQBankPage toEdit={currentId} /> }
-            { currentPage === 'qbdetail' && <QBankDetailsPage key={currentPage} qBankId={currentId} /> }
+            { currentPage === 'qbdetail' && <QBankDetailsPage key={currentId} qBankId={currentId} /> }
             { currentPage === 'core' && <CorePage /> }
             { currentPage === 'settings' && <SettingsPage /> }
         </div>

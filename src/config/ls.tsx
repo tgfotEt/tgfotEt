@@ -98,9 +98,9 @@ export function initProgress(questionContent: Question): QuestionProgress {
     if(isMCQ(questionContent) || isFRQ(questionContent) || isTranslate(questionContent))
         return { hash: hash(questionContent), count: 0, solved: 0 };
     if(isFillIn(questionContent))
-        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: Array((questionContent as FillIn).sentence.split(' ').length).fill(false) };
+        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: Array((questionContent as FillIn).sentence.split(' ').length).fill(0) };
     if(isMixed(questionContent))
-        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: Array((questionContent as Mixed).subquestions.length).fill(false) };
+        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: Array((questionContent as Mixed).subquestions.length).fill(0) };
     throw new Error('Invalid question type');
 }
 
