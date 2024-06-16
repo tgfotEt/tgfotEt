@@ -35,7 +35,6 @@ export const CorePage = () => {
 
     useEffect(() => {
         if (!submitted || !solving) return;
-        console.log('submitted');
         if(solving.individualProgress) solving.solved = solving.individualProgress.reduce((a, b) => a + b, 0) / solving.individualProgress.length;
         ls.updateProgress(qBankId, solving.hash, solving.solved, solving.individualProgress);
         nextQuestion();
@@ -50,7 +49,6 @@ export const CorePage = () => {
     const syncQBank = async (qs: Question[]) => {
         if (ls.getData().qb[qBankId].progress.length === 0) {
             await ls.initProgressAll(qBankId, qs);
-            return;
         }
         const qbHashes = qs.map((q) => [hash(q), q] as [string, Question]);
         const userHashes = ls.getData().qb[qBankId].progress;
@@ -83,7 +81,6 @@ export const CorePage = () => {
         const file = await getFile();
         const data = await syncQBank(file.questions);
         nextQuestion(data);
-        console.log('b');
     };
 
     const saveAndQuit = async () => {
@@ -95,7 +92,9 @@ export const CorePage = () => {
         <div>
             <LoadingOverlay func={loadQBank}>
                 <button onClick={saveAndQuit}>Save and Quit</button>
-                <FillInContainer key={questionId} solving={solving!} setSolving={setSolving} setSubmitted={setSubmitted} questionData={currentQuestion as FillIn} />
+                { currentQuestion && 
+                    <FillInContainer key={`${questionId}`} solving={solving!} setSolving={setSolving} setSubmitted={setSubmitted} questionData={currentQuestion as FillIn} />
+                }
             </LoadingOverlay>
         </div>
     );

@@ -1,6 +1,6 @@
 import { db, auth } from './firebase';
 import { doc, getDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
-import { UserData, QuestionBankMetaData, isMCQ, isFRQ, isFillIn, isTranslate, isMixed, FillIn, Mixed, QuestionProgress, Question } from './types';
+import { UserData, QuestionBankMetaData, isMCQ, isFRQ, isFillIn, isTranslate, isMixed,  Mixed, QuestionProgress, Question } from './types';
 import hash from 'object-hash';
 export function getData(): UserData {
     return JSON.parse(localStorage.getItem('data') || '{}') as UserData;
@@ -98,7 +98,7 @@ export function initProgress(questionContent: Question): QuestionProgress {
     if(isMCQ(questionContent) || isFRQ(questionContent) || isTranslate(questionContent))
         return { hash: hash(questionContent), count: 0, solved: 0 };
     if(isFillIn(questionContent))
-        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: Array((questionContent as FillIn).sentence.split(' ').length).fill(0) };
+        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: [] };
     if(isMixed(questionContent))
         return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: Array((questionContent as Mixed).subquestions.length).fill(0) };
     throw new Error('Invalid question type');
@@ -121,12 +121,14 @@ export function updateProgress(qBankId: string, hash: string, solved: number, in
     const progress = data.qb[qBankId].progress;
     const index = progress.findIndex((question) => question.hash === hash);
     if (index === -1) throw new Error('Question not found');
+    if (individualProgress && progress[index].individualProgress!.length !== individualProgress.length)
+        progress[index].individualProgress = Array(individualProgress.length).fill(0);
     progress[index] = {
         hash: hash, 
         count: addCount ? progress[index].count + 1 : progress[index].count,
         solved: Math.max(solved, progress[index].solved),
         individualProgress: individualProgress 
-            ? progress[index].individualProgress!.map((value, i) => individualProgress![i] || value) 
+            ? progress[index].individualProgress!.map((value, i) => Math.max(value, individualProgress[i]))
             : undefined
     };
     setData(data);

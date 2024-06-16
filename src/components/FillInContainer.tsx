@@ -19,37 +19,36 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
     const enterSkipRef = useRef(false);
     const inputRefs = useRef<Array<HTMLInputElement>>([]);
     const init = () => {
-        const blanks: BlankData[] = [];
+        const blks: BlankData[] = [];
         const sentence = questionData.sentence;
         let startindex = 0;
         for (let i = 0; i <= sentence.length; i++) {
             if (i === sentence.length || punctuations.includes(sentence[i])) {
                 if (!exceptions.includes(sentence.substring(startindex, i).toLowerCase()) && i - startindex > 1 && !!sentence.substring(startindex, i).match(/[a-z]/i) && (startindex === 0 || sentence[startindex].toUpperCase() !== sentence[startindex])) {
-                    const blank: BlankData = { text: sentence.substring(startindex, i), startindex: startindex, length: i - startindex, solved: false, index: blanks.length };
-                    blanks.push(blank);
+                    const blank: BlankData = { text: sentence.substring(startindex, i), startindex: startindex, length: i - startindex, solved: false, index: blks.length };
+                    blks.push(blank);
                 }
                 startindex = i + 1;
             }
         }
-        if(blanks.length === 0) {
+        if(blks.length === 0) {
             setSolving((prev: QuestionProgress) => ({ ...prev, solved: 1 }));
             setSubmitted(true);
             return;
         }
-        if (solving.individualProgress === undefined || solving.individualProgress.length !== blanks.length) {
-            setSolving((prev: QuestionProgress) => ({ ...prev, individualProgress: Array(blanks.length).fill(0) }));
+        if (solving.individualProgress === undefined || solving.individualProgress.length !== blks.length) {
+            setSolving((prev: QuestionProgress) => ({ ...prev, individualProgress: Array(blks.length).fill(0) }));
         }
-        for (let i = 0; i < blanks.length; i++) {
+        for (let i = 0; i < blks.length; i++) {
             if (solving.individualProgress![i] === 1) {
-                blanks[i].solved = true;
+                blks[i].solved = true;
             }
         }
-        let indexes = Array.from({ length: blanks.length }, (_, i) => i).filter((i) => !blanks[i].solved);
+        let indexes = Array.from({ length: blks.length }, (_, i) => i).filter((i) => !blks[i].solved);
         shuffle(indexes);
-        const sliceLength = Math.min(indexes.length, Math.ceil(blanks.length / 2));
+        const sliceLength = Math.min(indexes.length, Math.ceil(blks.length / 2));
         indexes = indexes.slice(0, sliceLength);
-        console.log(indexes, sliceLength);
-        const newBlanks = blanks.filter((_, i) => indexes.includes(i));
+        const newBlanks = blks.filter((_, i) => indexes.includes(i));
         setBlankIndex(0);
         blankIndexRef.current = 0;
         inputRefs.current = [];
@@ -59,15 +58,6 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
         blankCountRef.current = newBlanks.length;
         setBlanks(newBlanks);
     };
-
-    useEffect(() => {
-        console.log(inputRefs.current);
-        inputRefs.current.forEach((input, index) => {
-            input.disabled = index !== 0;
-            input.value = '';
-        });
-        inputRefs.current[0]?.focus();
-    }, [blanks]);
 
     const nextBlank = (correct: boolean) => {
         const bi = blankIndexRef.current;
@@ -83,16 +73,16 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
             individualProgress[currentBlankRef.current!.index] = 1;
             return { ...prev, individualProgress: individualProgress };
         });
+        else inputRefs.current[bi].style.color = 'orange';
         if (isLastBlank && !correct && enterSkipRef.current) {
             enterSkipRef.current = false;
             setSubmitted(true);
         } else if (isLastBlank && !correct) {
             enterSkipRef.current = true;
+            inputRefs.current[bi].disabled = true;
         } else if (!correct) {
             next();
         } else if (isLastBlank) {
-            if (solving.individualProgress!.every((value) => value === 1))
-                setSolving((prev: QuestionProgress) => ({ ...prev, solved: 1 }));
             setSubmitted(true);
         } else {
             next();
@@ -105,7 +95,6 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
     }, [blankIndex]);
 
     const onKeyDown = (e: KeyboardEvent) => {
-        console.log(blankIndexRef.current);
         setTimeout(() => {
             const currentBlank = currentBlankRef.current!;
             const value = inputRefs.current[blankIndexRef.current].value;
@@ -120,7 +109,6 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
     };
 
     useEffect(() => {
-        if (!questionData) return;
         init();
         window.addEventListener('keydown', onKeyDown);
         return () => window.removeEventListener('keydown', onKeyDown);
@@ -128,13 +116,21 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
 
     return (
         <div>
-            <button onClick={() => setSubmitted(true)}>Submit</button>
             <div>
                 {
                     blanks.map((blank, index) => (
                         <span key={`container-${index}`}>
                             <span key={`span-${index}`}>{questionData.sentence.substring((index === 0 ? 0 : blanks[index-1].startindex + blanks[index-1].length), blank.startindex)}</span>
-                            <input key={`input-${index}`} className='bg-gray-800 outline-none border-b-gray-200 border-b-2' style={{width: blank.length.toString() + "ch"}} ref={el => inputRefs.current[index] = el!} type='text' disabled={index !== 0} />
+                            <input
+                                key={`input-${index}`}
+                                autoFocus={index===blankIndex}
+                                className='bg-gray-800 outline-none border-b-gray-200 border-b-2'
+                                style={{width: blank.length.toString() + "ch"}}
+                                ref={el => inputRefs.current[index] = el!}
+                                type='text'
+                                disabled={index !== 0}
+                                maxLength={blank.length}
+                            />
                         </span>
                     ))
                 }
