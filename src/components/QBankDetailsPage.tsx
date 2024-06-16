@@ -65,7 +65,9 @@ export const QBankDetailsPage = ({ qBankId }) => {
                                         { startedUsing 
                                             ? (
                                                 <>
-                                                    <button onClick={setCorePage}>Continue</button>
+                                                    { !ls.getData().qb[qBankId].progress.every((p) => p.solved === 1) &&
+                                                        <button onClick={setCorePage}>Continue</button>
+                                                    }
                                                     <button onClick={() => setConfirmRestart(true)}>Restart</button>
                                                     <ConfirmOverlay
                                                         prompt='Are you sure you want to restart?'

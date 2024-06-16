@@ -45,17 +45,53 @@ export const isTranslate = (obj: any): boolean => {
         typeof obj['target'] === 'string';
 };
 
+export type Combined = MCQ | FRQ | Translate;
+
 export type Mixed = {
     prompt: string;
-    subquestions: [MCQ | FRQ][];
+    subquestions: Combined[];
 };
 
 export const isMixed = (obj: any): boolean => {
     return obj && 'prompt' in obj && 'subquestions' in obj &&
         typeof obj['prompt'] === 'string' &&
         Array.isArray(obj['subquestions']) &&
-        obj['subquestions'].every((subquestion: any) => isMCQ(subquestion) || isFRQ(subquestion));
+        obj['subquestions'].every((subquestion: any) => isMCQ(subquestion) || isFRQ(subquestion) || isTranslate(subquestion)) &&
+        obj['subquestions'].length > 0 && obj['subquestions'].length <= 100;
 }
+
+export const MCQtoMixed = (mcq: MCQ): Mixed => {
+    return {
+        prompt: mcq.question,
+        subquestions: [{ ...mcq, question: "" } as MCQ]
+    }
+};
+
+export const FRQtoMixed = (frq: FRQ): Mixed => {
+    return {
+        prompt: frq.question,
+        subquestions: [{ ...frq, question: "" } as FRQ]
+    };
+};
+
+export const TranslateToMixed = (translate: Translate): Mixed => {
+    return {
+        prompt: translate.source,
+        subquestions: [{ ...translate, source: "" } as Translate]
+    };
+};
+
+export const toMixed = (question: Combined|Mixed): Mixed => {
+    if (isMCQ(question)) {
+        return MCQtoMixed(question as MCQ);
+    } else if (isFRQ(question)) {
+        return FRQtoMixed(question as FRQ);
+    } else if (isTranslate(question)) {
+        return TranslateToMixed(question as Translate);
+    } else {
+        return question as Mixed;
+    }
+};
 
 export type Question = MCQ | FRQ | FillIn | Translate | Mixed;
 
@@ -95,7 +131,7 @@ export type QuestionProgress = {
     hash: string;
     count: number;
     solved: number;
-    individualProgress?: number[];
+    individualProgress: number[];
 };
 
 export type QuestionBankProgress = {

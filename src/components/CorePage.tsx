@@ -5,9 +5,10 @@ import { storage } from '../config/firebase';
 import { LoadingOverlay } from './LoadingOverlay';
 import * as ls from '../config/ls';
 import hash from 'object-hash';
-import { QuestionBank, QuestionProgress, Question, FillIn } from '../config/types';
+import { QuestionBank, QuestionProgress, Question, FillIn, isFillIn, Combined, Mixed } from '../config/types';
 import { FillInContainer } from './FillInContainer';
-
+import { ProgressBar } from './ProgressBar';
+import { MixedContainer } from './MixedContainer';
 export const CorePage = () => {
     const [currentPage, setCurrentPage] = useSearchParams();
     const qBankId = currentPage.get('id')!;
@@ -35,7 +36,6 @@ export const CorePage = () => {
 
     useEffect(() => {
         if (!submitted || !solving) return;
-        if(solving.individualProgress) solving.solved = solving.individualProgress.reduce((a, b) => a + b, 0) / solving.individualProgress.length;
         ls.updateProgress(qBankId, solving.hash, solving.solved, solving.individualProgress);
         nextQuestion();
     }, [submitted]);
@@ -93,7 +93,13 @@ export const CorePage = () => {
             <LoadingOverlay func={loadQBank}>
                 <button onClick={saveAndQuit}>Save and Quit</button>
                 { currentQuestion && 
-                    <FillInContainer key={`${questionId}`} solving={solving!} setSolving={setSolving} setSubmitted={setSubmitted} questionData={currentQuestion as FillIn} />
+                    <>
+                        { isFillIn(currentQuestion)
+                            ? <FillInContainer key={`${questionId}`} solving={solving!} setSolving={setSolving} setSubmitted={setSubmitted} questionData={currentQuestion as FillIn} />
+                            : <MixedContainer key={`${questionId}`} setSolving={setSolving} setSubmitted={setSubmitted} questionData={currentQuestion as Combined|Mixed} />
+                        }
+                        <ProgressBar qBankId={qBankId} solving={solving!} />
+                    </>
                 }
             </LoadingOverlay>
         </div>

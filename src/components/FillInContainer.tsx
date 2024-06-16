@@ -40,7 +40,7 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
             setSolving((prev: QuestionProgress) => ({ ...prev, individualProgress: Array(blks.length).fill(0) }));
         }
         for (let i = 0; i < blks.length; i++) {
-            if (solving.individualProgress![i] === 1) {
+            if (solving.individualProgress[i] === 1) {
                 blks[i].solved = true;
             }
         }
@@ -69,11 +69,12 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
         };
         const isLastBlank = bi === blankCountRef.current - 1;
         if (correct) setSolving((prev: QuestionProgress) => {
-            const individualProgress = prev.individualProgress!.slice();
+            const individualProgress = prev.individualProgress.slice();
             individualProgress[currentBlankRef.current!.index] = 1;
-            return { ...prev, individualProgress: individualProgress };
+            const solved = individualProgress.reduce((a, b) => a + b, 0) / individualProgress.length;
+            return { ...prev, individualProgress: individualProgress, solved: solved };
         });
-        else inputRefs.current[bi].style.color = 'orange';
+        else inputRefs.current[bi].style.color = 'orangered';
         if (isLastBlank && !correct && enterSkipRef.current) {
             enterSkipRef.current = false;
             setSubmitted(true);
@@ -109,6 +110,7 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
     };
 
     useEffect(() => {
+        if(!questionData) return;
         init();
         window.addEventListener('keydown', onKeyDown);
         return () => window.removeEventListener('keydown', onKeyDown);
@@ -116,7 +118,7 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
 
     return (
         <div>
-            <div>
+            <div className='text-xl'>
                 {
                     blanks.map((blank, index) => (
                         <span key={`container-${index}`}>

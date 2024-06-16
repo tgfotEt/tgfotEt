@@ -96,7 +96,7 @@ export function hasQBank(qBankId: string) {
 
 export function initProgress(questionContent: Question): QuestionProgress {
     if(isMCQ(questionContent) || isFRQ(questionContent) || isTranslate(questionContent))
-        return { hash: hash(questionContent), count: 0, solved: 0 };
+        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: [0] };
     if(isFillIn(questionContent))
         return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: [] };
     if(isMixed(questionContent))
@@ -116,20 +116,18 @@ export async function setProgress(qBankId: string, progress: QuestionProgress[])
     await setSyncData(data);
 }
 
-export function updateProgress(qBankId: string, hash: string, solved: number, individualProgress?: number[], addCount=true) {
+export function updateProgress(qBankId: string, hash: string, solved: number, individualProgress: number[], addCount=true) {
     const data = getData();
     const progress = data.qb[qBankId].progress;
     const index = progress.findIndex((question) => question.hash === hash);
     if (index === -1) throw new Error('Question not found');
-    if (individualProgress && progress[index].individualProgress!.length !== individualProgress.length)
+    if (progress[index].individualProgress.length !== individualProgress.length)
         progress[index].individualProgress = Array(individualProgress.length).fill(0);
     progress[index] = {
         hash: hash, 
         count: addCount ? progress[index].count + 1 : progress[index].count,
         solved: Math.max(solved, progress[index].solved),
-        individualProgress: individualProgress 
-            ? progress[index].individualProgress!.map((value, i) => Math.max(value, individualProgress[i]))
-            : undefined
+        individualProgress: progress[index].individualProgress.map((value, i) => Math.max(value, individualProgress[i]))
     };
     setData(data);
 }
