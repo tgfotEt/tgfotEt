@@ -46,7 +46,7 @@ Below is an example of how it should look like:
         },
         {
             "sentence":"The United States is a country."
-        },
+        }
     ]
 }
 ```
