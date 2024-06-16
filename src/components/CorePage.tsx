@@ -81,6 +81,7 @@ export const CorePage = () => {
         const file = await getFile();
         const data = await syncQBank(file.questions);
         nextQuestion(data);
+        console.log(currentQuestion);
     };
 
     const saveAndQuit = async () => {
