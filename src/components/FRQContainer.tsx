@@ -1,4 +1,5 @@
 import { FRQ } from '../config/types';
+// @ts-ignore
 export const FRQContainer = ({ active, setSolved, setSubmitted, questionData }: { active: boolean, setSolved: any, setSubmitted: any, questionData: FRQ }) => {
     return (
         <div>

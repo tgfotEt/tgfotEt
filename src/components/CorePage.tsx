@@ -89,9 +89,9 @@ export const CorePage = () => {
     };
 
     return (
-        <div>
+        <div className='absolute inset-0 '>
             <LoadingOverlay func={loadQBank}>
-                <button onClick={saveAndQuit}>Save and Quit</button>
+                <button onClick={saveAndQuit} className='m-5 p-3 rounded-md bg-gray-700'>Save and Quit</button>
                 { currentQuestion && 
                     <>
                         { isFillIn(currentQuestion)

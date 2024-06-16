@@ -1,4 +1,5 @@
 import { Translate } from '../config/types';
+// @ts-ignore
 export const TranslateContainer = ({ active, setSolved, setSubmitted, questionData }: { active: boolean, setSolved: any, setSubmitted: any, questionData: Translate }) => {
     return (
         <div>
