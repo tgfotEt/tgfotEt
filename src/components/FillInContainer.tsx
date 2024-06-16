@@ -44,25 +44,31 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
                 blanks[i].solved = true;
             }
         }
-        const indexes = Array.from({ length: blanks.length }, (_, i) => i).filter((i) => !blanks[i].solved);
+        let indexes = Array.from({ length: blanks.length }, (_, i) => i).filter((i) => !blanks[i].solved);
         shuffle(indexes);
         const sliceLength = Math.min(indexes.length, Math.ceil(blanks.length / 2));
-        indexes.slice(0, sliceLength);
+        indexes = indexes.slice(0, sliceLength);
+        console.log(indexes, sliceLength);
         const newBlanks = blanks.filter((_, i) => indexes.includes(i));
         setBlankIndex(0);
         blankIndexRef.current = 0;
         inputRefs.current = [];
         inputRefs.current = inputRefs.current.slice(0, newBlanks.length);
         inputRefs.current.length = newBlanks.length;
+        currentBlankRef.current = newBlanks[0];
+        blankCountRef.current = newBlanks.length;
+        setBlanks(newBlanks);
+    };
+
+    useEffect(() => {
         console.log(inputRefs.current);
         inputRefs.current.forEach((input, index) => {
             input.disabled = index !== 0;
             input.value = '';
         });
-        currentBlankRef.current = newBlanks[0];
-        blankCountRef.current = newBlanks.length;
-        setBlanks(newBlanks);
-    };
+        inputRefs.current[0]?.focus();
+    }, [blanks]);
+
     const nextBlank = (correct: boolean) => {
         const bi = blankIndexRef.current;
         const next = () => {
