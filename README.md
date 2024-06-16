@@ -1,30 +1,54 @@
-# React + TypeScript + Vite
+# tgfotEt
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A website to help you (and others) prepare for exams.
+This README is for explaining how the website works and how to create your own question bank and upload it so everyone else can use it!
 
-Currently, two official plugins are available:
+## The Website
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Currently, the website features two question types:
 
-## Expanding the ESLint configuration
+- Fill in the blank
+- Multiple choice (Single-select and Multi-select)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+and I will be adding more types in the future, such as:
 
-- Configure the top-level `parserOptions` property like this:
+- Translation for sentences (that I promised [here](https://tgfotet.netlify.app))
+- and more...
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
+## Creating your own Question Bank
+
+You will be uploading a json file as your Question Bank. If you aren't familiar with the json file format, you can search it up online.
+Below is an example of how it should look like:
+```json
+{
+    "title": "Your Title!",
+    "description": "Your description...",
+    "questions": [
+        {
+            "question":"Chicago is a",
+            "choices":[
+                "city",
+                "state",
+                "country",
+                "continent"
+            ],
+            "answer": 0
+        },
+        {
+            "question":"New York is a",
+            "choices":[
+                "city",
+                "state",
+                "country",
+                "continent"
+            ],
+            "answer":[0, 1]
+        },
+        {
+            "sentence":"The United States is a country."
+        },
+    ]
 }
 ```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+There are three questions in the Question Bank above. The first one is a single-select multiple choice problem. You must specify the question, choices, and answer (0-indexed). The second question is a multi-select multiple choice proble. The only difference between the two multiple choice problems is that you need to give a list for the answer of multi-select question. That also means that you can create multi-select multiple choice questions with only one correct answer. The third question is a fill in the blank problem. You don't need to specify where to put the blanks, the website is smart enough to deduce that.
+Tools like ChatGPT are pretty good at formatting stuff like this, so you don't even need to type the json yourself. Just paste the example above to ChatGPT, give it your set of problems, and it will format it for you.

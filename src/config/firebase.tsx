@@ -5,13 +5,13 @@ import { getStorage } from "firebase/storage";
 //import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAIIXIO2wwKjN-5wpo4GlZEa0bnQfz4n7s",
-  authDomain: "tgfotet-dev.firebaseapp.com",
-  projectId: "tgfotet-dev",
-  storageBucket: "tgfotet-dev.appspot.com",
-  messagingSenderId: "46298626497",
-  appId: "1:46298626497:web:4d47b63de642d560fa9740",
-  measurementId: "G-RV93EV0F93"
+  apiKey: "AIzaSyAOgtBewy9a3SNheAVUaCqMNoee3VR2UIA",
+  authDomain: "tgfotet.firebaseapp.com",
+  projectId: "tgfotet",
+  storageBucket: "tgfotet.appspot.com",
+  messagingSenderId: "551245447834",
+  appId: "1:551245447834:web:4b4f1a03adf9a2dc7c1523",
+  measurementId: "G-6GW2MVFBVN"
 };
 
 const app = initializeApp(firebaseConfig);

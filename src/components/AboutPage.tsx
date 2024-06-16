@@ -1,8 +1,7 @@
 export const AboutPage = () => {
     return (
         <div>
-            <h1>About</h1>
-            <p>This is the about page.</p>
+            <h1 className='text-7xl m-5'>tgfotEt</h1>
         </div>
     );
 }
