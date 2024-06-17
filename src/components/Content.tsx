@@ -19,7 +19,7 @@ export const Content = () => {
         });
     }, []);
     return (
-        <div className='text-gray-100 font-mono'> 
+        <div className='text-gray-100 font-sans'> 
             { isLoggedIn 
                 ? <LoadingOverlay func={ls.initQBank} >
                     <PageContainer />

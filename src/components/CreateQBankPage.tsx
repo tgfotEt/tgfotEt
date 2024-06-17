@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { doc, collection, addDoc, setDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes } from 'firebase/storage';
@@ -43,20 +43,30 @@ export const CreateQBankPage = ({ toEdit }) => {
         setIsUploading(false);
         setCurrentPage({p:'userqb'});
     };
+    useEffect(() => {
+        const checkUser = async () => {
+            if(!toEdit) return;
+            const qbankDoc = doc(db, 'qbank', toEdit);
+            const snapshot = await getDoc(qbankDoc);
+            if (!snapshot.exists()) setCurrentPage({p:'qbdetail', id: toEdit});
+            const authorid = snapshot.data()!.authorid;
+            if (authorid !== auth.currentUser!.uid) setCurrentPage({p:'qbdetail', id: toEdit});
+        }
+        checkUser();
+    }, []);
     return (
         <div>
             { toEdit 
                 ? <>
-                    <button onClick={() => setCurrentPage({p:'qbdetail', id: toEdit})}>Back</button>
-                    <h1>Edit your Question Bank</h1>
+                    <button className='bg-gray-700 rounded-md p-2 hover:bg-gray-600' onClick={() => setCurrentPage({p:'qbdetail', id: toEdit})}>Back</button>
+                    <h1 className='text-3xl p-5'>Edit your Question Bank</h1>
                 </>
                 : <>
-                    <button onClick={() => setCurrentPage({p:'userqb'})}>Back</button>
-                    <h1>Create your own Question Bank</h1>
+                    <button className='bg-gray-700 rounded-md p-2 hover:bg-gray-600' onClick={() => setCurrentPage({p:'userqb'})}>Back</button>
+                    <h1 className='text-3xl p-5'>Create your own Question Bank</h1>
                 </>
             }
-            <input type='file' accept='.json' onChange={(e) => setFile((e.target as HTMLInputElement).files![0])} />
-            <button onClick={() => setIsUploading(true)}>Upload</button>
+            <label className='bg-gray-700 rounded-md p-2 hover:bg-gray-600 inline-block cursor-pointer'><input hidden type='file' accept='.json' onChange={(e) => {setFile((e.target as HTMLInputElement).files![0]); setIsUploading(true);}} />Choose file</label>
             <LoadingOverlay func={uploadFile} state={isUploading}> </LoadingOverlay>
         </div>
     );

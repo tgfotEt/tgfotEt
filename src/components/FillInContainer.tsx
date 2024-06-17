@@ -118,7 +118,7 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
 
     return (
         <div>
-            <div className='text-xl'>
+            <div className='text-xl font-mono'>
                 {
                     blanks.map((blank, index) => (
                         <span key={`container-${index}`}>

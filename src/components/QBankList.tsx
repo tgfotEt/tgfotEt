@@ -33,7 +33,7 @@ export const QBankList = ({ sortBy }) => {
             <div className='flex flex-col mx-20 gap-2'>
                 {
                     qBankList.map((qbank, index) => (
-                        <button className='rounded-md bg-gray-700 p-2 flex flex-row text-left min-h-20' key={index} onClick={() => setCurrentPage({ p: 'qbdetail', id: qbank[1] })}>
+                        <button className='rounded-md bg-gray-700 p-2 flex flex-row text-left min-h-20 hover:bg-gray-600' key={index} onClick={() => setCurrentPage({ p: 'qbdetail', id: qbank[1] })}>
                             <h2 className='font-bold truncate w-1/3 text-lg'>{qbank[0].title}</h2>
                             <p className='line-clamp-2 w-2/3 italic text-gray-400'>{qbank[0].description}</p>
                         </button>
@@ -41,6 +41,9 @@ export const QBankList = ({ sortBy }) => {
                 }
                 {qBankList.length !== 0 && !allLoaded &&
                     <button onClick={getQBankList}>Load More</button>
+                }
+                { qBankList.length === 0 &&
+                    <div className='text-gray-400'>No Question Banks found</div>
                 }
             </div>
         </LoadingOverlay>
