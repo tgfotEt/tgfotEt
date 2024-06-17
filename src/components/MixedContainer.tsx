@@ -48,9 +48,9 @@ export const MixedContainer = ({ setSolving, setSubmitted, questionData }: { set
     return (
         <>
             { mixed && (
-                <>
-                    <div className='flex justify-center h-2/3'>
-                        <div className='bg-gray-700 flex flex-row rounded-2xl p-5 gap-5 w-5/6 h-full'>
+                <div className='absolute inset-0 z-[2]'>
+                    <div className='absolute inset-0 flex justify-center top-24'>
+                        <div className='bg-gray-700 flex flex-row rounded-2xl p-5 gap-5 w-5/6 h-2/3'>
                             <div className='w-1/3 text-left'>{mixed.prompt}</div>
                             <div className='rounded-lg bg-gray-800 p-5 w-2/3 overflow-y-auto'>
                                 {mixed.subquestions.map((subquestion, i) => {
@@ -65,8 +65,8 @@ export const MixedContainer = ({ setSolving, setSubmitted, questionData }: { set
                             </div>
                         </div>
                     </div>
-                    <button onClick={onSubmit} hidden={!finished} className='bg-gray-700 rounded-md px-3 py-1 m-4'>Next</button>
-                </>
+                    <button onClick={onSubmit} hidden={!finished} className='absolute top-3/4 left-1/2 -translate-x-1/2 bg-gray-700 rounded-md px-3 py-1'>Next</button>
+                </div>
             )}
         </>
     );

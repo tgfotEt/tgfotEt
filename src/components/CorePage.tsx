@@ -90,18 +90,18 @@ export const CorePage = () => {
     };
 
     return (
-        <div className='absolute inset-0 '>
+        <div className='absolute inset-0'>
             <LoadingOverlay func={loadQBank}>
-                <button onClick={saveAndQuit} className='m-5 p-3 rounded-md bg-gray-700'>Save and Quit</button>
                 { currentQuestion && 
                     <>
+                        <ProgressBar qBankId={qBankId} solving={solving!} />
                         { isFillIn(currentQuestion)
                             ? <FillInContainer key={`${questionId}`} solving={solving!} setSolving={setSolving} setSubmitted={setSubmitted} questionData={currentQuestion as FillIn} />
                             : <MixedContainer key={`${questionId}`} setSolving={setSolving} setSubmitted={setSubmitted} questionData={currentQuestion as Combined|Mixed} />
                         }
-                        <ProgressBar qBankId={qBankId} solving={solving!} />
                     </>
                 }
+                <button onClick={saveAndQuit} className='m-5 p-3 rounded-md bg-gray-700 z-50 relative'>Save and Quit</button>
             </LoadingOverlay>
         </div>
     );

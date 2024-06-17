@@ -51,7 +51,7 @@ export const MCQContainer = ({ active, setSolved, setSubmitted, questionData }: 
                 ))}
             </div>
             <div className='flex justify-end'>
-                <button disabled={!active} onClick={submit} className='bg-gray-700 rounded-md p-2 w-1/3'>Submit</button>
+                <button disabled={!active} onClick={submit} className='bg-gray-700 rounded-md py-2 px-4 w-fit'>Submit</button>
             </div>
         </div>
     );
