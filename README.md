@@ -91,3 +91,14 @@ If you really want it removed, just ask me and I'll remove it from the website.
 
 If you have found a bug, want a feature, or anything else, you can either open an issue on the tgfotEt github repository or contact at tgfotet@gmail.com
 
+## Technical Details
+
+This website uses the RTFM tech stack:
+
+- React: for a dynamic single-page application
+- TailwindCSS: for styling
+- Firebase: for the backend
+- Markdown: to write this README!
+
+If you don't know what the above means, I would advise you to RTFM.
+
