@@ -101,7 +101,7 @@ export const CorePage = () => {
                         }
                     </>
                 }
-                <button onClick={saveAndQuit} className='m-5 p-3 rounded-md bg-gray-700 z-50 relative'>Save and Quit</button>
+                <button onClick={saveAndQuit} className='m-5 p-3 rounded-md bg-gray-700 z-10 relative'>Save and Quit</button>
             </LoadingOverlay>
         </div>
     );

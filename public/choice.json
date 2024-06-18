@@ -1,5 +1,5 @@
 {
-    "title": "Changed name!",
+    "title": "Mixed test",
     "description": "This is another simple problem set.",
     "questions": [
         {
@@ -13,53 +13,58 @@
             "answer":[0, 1]
         },
         {
-            "question":"Chicago is a",
-            "choices":[
-                "city",
-                "state",
-                "country",
-                "continent"
-            ],
-            "answer": 0
-        },
-        {
-            "question":"California is a",
-            "choices":[
-                "city",
-                "state",
-                "country",
-                "continent"
-            ],
-            "answer": 1
-        },
-        {
-            "question":"United States is a",
-            "choices":[
-                "city",
-                "number",
-                "country",
-                "continent"
-            ],
-            "answer": 2
-        },
-        {
-            "question":"North America is a",
-            "choices":[
-                "person",
-                "state",
-                "country",
-                "continent"
-            ],
-            "answer": 3
-        },
-        {
-            "question":"You are a",
-            "choices":[
-                "person",
-                "human",
-                "human being"
-            ],
-            "answer": [0, 1, 2]
+            "prompt": "mixed title",
+            "subquestions": [
+                {
+                    "question":"Chicago is a",
+                    "choices":[
+                        "city",
+                        "state",
+                        "country",
+                        "continent"
+                    ],
+                    "answer": 0
+                },
+                {
+                    "question":"California is a",
+                    "choices":[
+                        "city",
+                        "state",
+                        "country",
+                        "continent"
+                    ],
+                    "answer": 1
+                },
+                {
+                    "question":"United States is a",
+                    "choices":[
+                        "city",
+                        "number",
+                        "country",
+                        "continent"
+                    ],
+                    "answer": 2
+                },
+                {
+                    "question":"North America is a",
+                    "choices":[
+                        "person",
+                        "state",
+                        "country",
+                        "continent"
+                    ],
+                    "answer": 3
+                },
+                {
+                    "question":"You are a",
+                    "choices":[
+                        "person",
+                        "human",
+                        "human being"
+                    ],
+                    "answer": [0, 1, 2]
+                }
+            ]
         }
     ]
 }
