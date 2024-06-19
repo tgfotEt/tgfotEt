@@ -12,7 +12,7 @@ export const QBankList = ({ sortBy }) => {
     const [_, setCurrentPage] = useSearchParams();
     
     const getQBankList = async () => {
-        const lim = 3;
+        const lim = 10;
         const qBankRef = collection(db, 'qbank');
         const q = (lastVisible
             ? query(qBankRef, ...sortBy, limit(lim), startAfter(lastVisible))
@@ -30,7 +30,7 @@ export const QBankList = ({ sortBy }) => {
 
     return (
         <LoadingOverlay func={getQBankList}>
-            <div className='flex flex-col mx-20 gap-2'>
+            <div className='flex flex-col mx-[10%] gap-2'>
                 {
                     qBankList.map((qbank, index) => (
                         <button className='rounded-md bg-gray-700 p-2 flex flex-row text-left min-h-20 hover:bg-gray-600' key={index} onClick={() => setCurrentPage({ p: 'qbdetail', id: qbank[1] })}>

@@ -22,11 +22,19 @@ First, sign in / sign up with your YPHS google account.
 
 Go to Explore => Click on the question bank that you want to practice => Click Add to Saved.
 
+Or, if you have already added it to your saved question banks, you can access it from the icon on the top left.
+
 Then, you should be able to start!
 
-If you can't find what you want, it means that no one has created it yet. You can create one yourself!
+Remember to save and quit to save your progress to your account.
+
+You can also restart the progress of any Question Bank.
+
+If you can't find the problems you want, it means that no one has created it yet. You can create one yourself!
 
 ## Creating your own Question Bank
+
+Go to Profile => My Question Banks => Create your own question bank.
 
 You will be uploading a json file as your Question Bank. If you aren't familiar with the json file format, you can search it up online.
 
@@ -59,11 +67,41 @@ Below is an example of how it should look like:
         },
         {
             "sentence":"The United States is a country."
+        },
+        {
+            "source":"芝加哥是一個城市。",
+            "target":"Chicago is a city."
+        },
+        {
+            "prompt":"設 x=1, y=2 。 請問：",
+            "subquestions":[
+                {
+                    "question":"x+y=",
+                    "choices":[
+                        "1",
+                        "2",
+                        "3",
+                        "4"
+                    ],
+                    "answer":2
+                },
+                {
+                    "question":"x-y=",
+                    "choices":[
+                        "-1",
+                        "-2",
+                        "-3",
+                        "-4"
+                    ],
+                    "answer":0
+                }
+            ]
         }
     ]
 }
 ```
-There are three questions in the Question Bank above.
+
+There are six questions in the Question Bank above.
 
 The first one is a single-select multiple choice problem. You must specify the question, choices, and answer (0-indexed).
 
@@ -71,7 +109,20 @@ The second question is a multi-select multiple choice problem. The only differen
 
 The third question is a fill in the blanks problem. You don't need to specify where to put the blanks, the website is smart enough to deduce that.
 
+The fourth question is a sentence translation problem. You have to specify the "source" sentence and the "target" sentence.
+
+The fifth and sixth are both in a single question set. You have to specify the prompt and the subquestions. The subquestions can only be of type "fill in the blanks" or "multiple choice."
+
 Tools like ChatGPT are pretty good at formatting stuff like this, so you don't even need to type the json yourself. Just paste the example above to ChatGPT, give it your set of problems, and it will format it for you.
+
+### Important Notes:
+- Your title must be between 1 and 100 characters long, inclusive.
+- Your description must be between 1 and 1000 characters long, inclusive.
+- The number of questions in your problem set must be between 1 and 500, inclusive.
+- The total size of your json file must not exceed 100KB.
+- Each question's format must follow one of the question types mentioned above.
+- If any of the conditions are not met, the website will return an error.
+- Remember that everyone will be able to use your question bank after you upload it!
 
 ## Edit your Question Bank
 

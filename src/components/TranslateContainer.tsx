@@ -66,23 +66,33 @@ export const TranslateContainer = ({ active, setSolved, setSubmitted, questionDa
         return <span className='text-orange-400'>{op.newChar}</span>;
     }
     return (
-        <div>
+        <div className='h-full'>
             { questionData.source }
-            <textarea className='bg-gray-700 rounded-md p-2 text-left resize-none' ref={ textArea } disabled={!active} placeholder='Type your translation here'></textarea>
-            <div className='flex justify-end'>
-                <button disabled={!active} onClick={submit} className='bg-gray-700 rounded-md py-2 px-4 w-fit'>Submit</button>
-            </div>
-            <dialog open={targetSubmitted}>
-                <div className='[&_*]:inline-block [&_s]:text-[rgb(207,168,255)]'>
-                    {
-                        distance && distance.sequence.map((op: TranslateMetaData, i) => {
-                            return <span key={i}>{checkOps(op)}&nbsp;</span>;
-                        })
-                    }
-                </div>
-                <button onClick={() => setTargetSubmitted(false)}>Try again</button>
-                <button onClick={() => {setSubmitted(true); setTargetSubmitted(false);}}>Next</button>
-            </dialog>
+            { !targetSubmitted
+                ?
+                <>
+                    <textarea className='block bg-gray-700 rounded-md p-2 text-left resize-none w-full h-1/2 outline-none' ref={ textArea } disabled={!active} placeholder='Type your translation here'></textarea>
+                    <div className='flex justify-end'>
+                        <button disabled={!active} onClick={submit} className='bg-gray-700 rounded-md py-2 px-4 w-fit my-3'>Submit</button>
+                    </div>
+                </>
+                :
+                <>
+                    <div className='bg-gray-700 rounded-md p-2 text-left'>
+                        <div className='[&_*]:inline-block [&_s]:text-[rgb(207,168,255)]'>
+                            {
+                                distance && distance.sequence.map((op: TranslateMetaData, i) => {
+                                    return <span key={i}>{checkOps(op)}&nbsp;</span>;
+                                })
+                            }
+                        </div>
+                    </div>
+                    <div className='flex flex-row justify-end'>
+                    <button onClick={() => setTargetSubmitted(false)} className='bg-gray-700 rounded-md py-2 px-4 w-fit m-3'>Try again</button>
+                    <button onClick={() => {setSubmitted(true); setTargetSubmitted(false);}} className='bg-gray-700 rounded-md py-2 px-4 w-fit my-3'>Next</button>
+                    </div>
+                </>
+            }
         </div>
     );
 };

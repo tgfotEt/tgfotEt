@@ -30,7 +30,7 @@ export const LoadingOverlay = ({ func, state=true, children }) => {
                     <div className='bg-red-700 p-6 rounded-lg'>
                         <h1 className='text-2xl'>Error</h1>
                         <p>{error}</p>
-                        <button onClick={() => setError("")}>Close</button>
+                        <button className='p-2 m-2 bg-red-600 hover:bg-red-500 rounded-md' onClick={() => setError("")}>Close</button>
                     </div>
                 </div>
                 : children
@@ -49,8 +49,8 @@ export const ConfirmOverlay = ({ prompt, confirmText = 'OK', cancelText = 'Cance
                     <div className='bg-gray-700 p-6 rounded-lg'>
                         <h1 className='text-2xl'>{prompt}</h1>
                         <div className='flex gap-2'>
-                            { !alert && <button onClick={() => { onCancel(); setIsOpen(false); }}>{cancelText}</button> }
-                            <button onClick={() => { onConfirm(); setIsOpen(false); }}>{confirmText}</button>
+                            { !alert && <button className='p-2 m-2 bg-gray-600 hover:bg-gray-500 rounded-md' onClick={() => { onCancel(); setIsOpen(false); }}>{cancelText}</button> }
+                            <button className='p-2 m-2 bg-gray-600 hover:bg-gray-500 rounded-md' onClick={() => { onConfirm(); setIsOpen(false); }}>{confirmText}</button>
                         </div>
                     </div>
                 </div>
