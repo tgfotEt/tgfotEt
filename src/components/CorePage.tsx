@@ -23,7 +23,7 @@ export const CorePage = () => {
         const progress = ls.getData().qb[qBankId].progress;
         const available = progress.filter((q) => q.solved < 1);
         if (available.length === 0) {
-            setCurrentPage({p:'qbdetail', id: qBankId});
+            saveAndQuit();
             return;
         }
         const minCount = Math.min(...available.map((q) => q.count));

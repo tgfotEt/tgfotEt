@@ -10,15 +10,17 @@ Currently, the website features two question types:
 
 - Fill in the blanks
 - Multiple choice (Single-select and Multi-select)
+- Translation for sentences
 
-I will be adding more types in the future, such as:
+I will be adding more features in the future, such as:
 
-- Translation for sentences (that I promised [here](https://tgfotet.netlify.app))
+- 填充題
+- Better mobile support
 - and more...
 
 ## Usage
 
-First, sign in / sign up with your YPHS google account.
+First, log in / sign up with your YPHS google account.
 
 Go to Explore => Click on the question bank that you want to practice => Click Add to Saved.
 

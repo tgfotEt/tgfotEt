@@ -27,8 +27,8 @@ export const LogIn = ({setIsLoggedIn}) => {
 
     return (
         <div className='flex flex-col items-center gap-20 p-8'>
-            <h1 className='text-9xl'>tgfotEt</h1>
-            <button className='text-4xl' onClick={signInWithGoogle}>Log In / Sign up with your yphs Google Account</button>
+            <h1 className='text-7xl'>tgfotEt</h1>
+            <button className='text-4xl bg-gray-700 rounded-md hover:bg-gray-600 p-5' onClick={signInWithGoogle}>Log In / Sign up with your yphs Google Account</button>
         </div>
     );
 };

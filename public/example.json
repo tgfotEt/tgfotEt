@@ -1,6 +1,6 @@
 {
-    "title": "translate",
-    "description": "This is another simple problem set.",
+    "title": "Example Question Bank",
+    "description": "Your description...",
     "questions": [
         {
             "question":"Chicago is a",
@@ -10,18 +10,49 @@
                 "country",
                 "continent"
             ],
-            "answer":[1, 2]
+            "answer": 0
         },
         {
-            "question":"The United States is a",
-            "answer":"country"
+            "question":"New York is a",
+            "choices":[
+                "city",
+                "state",
+                "country",
+                "continent"
+            ],
+            "answer":[0, 1]
         },
         {
             "sentence":"The United States is a country."
         },
         {
-            "source":"美國是一個國家。",
-            "target":"The United States is a country."
+            "source":"芝加哥是一個城市。",
+            "target":"Chicago is a city."
+        },
+        {
+            "prompt":"設 x=1, y=2 。 請問：",
+            "subquestions":[
+                {
+                    "question":"x+y=",
+                    "choices":[
+                        "1",
+                        "2",
+                        "3",
+                        "4"
+                    ],
+                    "answer":2
+                },
+                {
+                    "question":"x-y=",
+                    "choices":[
+                        "-1",
+                        "-2",
+                        "-3",
+                        "-4"
+                    ],
+                    "answer":0
+                }
+            ]
         }
     ]
 }
