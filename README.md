@@ -6,7 +6,7 @@ This README is for explaining how the website works and how to create your own q
 
 ## The Website
 
-Currently, the website features two question types:
+Currently, the website features three question types:
 
 - Fill in the blanks
 - Multiple choice (Single-select and Multi-select)
@@ -71,7 +71,7 @@ Below is an example of how it should look like:
             "sentence":"The United States is a country."
         },
         {
-            "source":"芝加哥是一個城市。",
+            "source":"芝加哥是一座城市。",
             "target":"Chicago is a city."
         },
         {
@@ -123,7 +123,7 @@ Tools like ChatGPT are pretty good at formatting stuff like this, so you don't e
 - The number of questions in your problem set must be between 1 and 500, inclusive.
 - The total size of your json file must not exceed 100KB.
 - Each question's format must follow one of the question types mentioned above.
-- If any of the conditions are not met, the website will return an error.
+- If any of the conditions above are not met, the website will return an error.
 - Remember that everyone will be able to use your question bank after you upload it!
 
 ## Edit your Question Bank

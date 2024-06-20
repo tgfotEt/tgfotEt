@@ -17,6 +17,31 @@ export async function syncData() {
     await setDoc(userRef, data);
 }
 
+export async function syncDataByTime() {
+    const userId = auth.currentUser!.uid;
+    const userRef = doc(db, 'users', userId);
+    const rawData = await getDoc(userRef);
+    if (!rawData.exists()) {
+        await syncData();
+        return false;
+    }
+    const docData = rawData.data() as UserData;
+    const userData = getData();
+    const newData = userData;
+    for (const [key, value] of Object.entries(docData.qb)) {
+        if (!(key in userData.qb)) {
+            newData.qb[key] = value;
+        } else {
+            if (value.lastUsed.seconds > userData.qb[key].lastUsed.seconds) {
+                newData.qb[key] = value;
+            }
+        }
+    }
+    setData(newData);
+    await syncData();
+    return true;
+}
+
 export async function setSyncData(data: UserData) {
     setData(data);
     await syncData();
@@ -43,14 +68,12 @@ export async function addSyncQBank(qBankId: string, title: string) {
 }
 
 export async function initQBank() {
-    const userId = auth.currentUser!.uid;
-    const qBankDoc = doc(db, 'users', userId);
-    const snapshot = await getDoc(qBankDoc);
-    if (!snapshot.exists()) {
-        await setDoc(qBankDoc, { qb: {} } as UserData);
+    const success = await syncDataByTime();
+    if (!success) {
+        const userId = auth.currentUser!.uid;
+        const userRef = doc(db, 'users', userId);
+        await setDoc(userRef, { qb: {} });
         setData({ qb: {} } as UserData);
-    } else {
-        setData(snapshot.data() as UserData);
     }
 }
 
@@ -96,11 +119,11 @@ export function hasQBank(qBankId: string) {
 
 export function initProgress(questionContent: Question): QuestionProgress {
     if(isMCQ(questionContent) || isFRQ(questionContent) || isTranslate(questionContent))
-        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: [0] };
+    return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: [0] };
     if(isFillIn(questionContent))
-        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: [] };
+    return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: [] };
     if(isMixed(questionContent))
-        return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: Array((questionContent as Mixed).subquestions.length).fill(0) };
+    return { hash: hash(questionContent), count: 0, solved: 0, individualProgress: Array((questionContent as Mixed).subquestions.length).fill(0) };
     throw new Error('Invalid question type');
 }
 
@@ -122,7 +145,7 @@ export function updateProgress(qBankId: string, hash: string, solved: number, in
     const index = progress.findIndex((question) => question.hash === hash);
     if (index === -1) throw new Error('Question not found');
     if (progress[index].individualProgress.length !== individualProgress.length)
-        progress[index].individualProgress = Array(individualProgress.length).fill(0);
+    progress[index].individualProgress = Array(individualProgress.length).fill(0);
     progress[index] = {
         hash: hash, 
         count: addCount ? progress[index].count + 1 : progress[index].count,
