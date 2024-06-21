@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../config/firebase';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { auth, db, storage } from '../config/firebase';
 import { QuestionBankMetaData } from '../config/types';
 import { LoadingOverlay, ConfirmOverlay } from './LoadingOverlay';
 import * as ls from '../config/ls';
@@ -45,6 +46,14 @@ export const QBankDetailsPage = ({ qBankId }) => {
             await ls.setTitle(qBankId, snapshot.data().title);
         }
     }
+
+    const exportQBank = async () => {
+        const url = await getDownloadURL(ref(storage, `qbank/${qBankId}`));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = qBankMetaData!.title + '.json';
+        a.click();
+    };
 
     return (
         <div className='py-20 flex flex-row gap-2 justify-center align-middle h-full'>
@@ -94,6 +103,7 @@ export const QBankDetailsPage = ({ qBankId }) => {
                             { auth.currentUser!.uid === qBankMetaData.authorid && 
                                 <button onClick={() => setCurrentPage({p:'editqb',id:qBankId})}>Edit</button>
                             }
+                            <button onClick={exportQBank}>Export as JSON</button>
                             <button onClick={() => setCurrentPage({p:'qbank'})}>Back</button>
                         </div>
                     </>

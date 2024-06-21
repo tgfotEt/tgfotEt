@@ -103,6 +103,8 @@ Below is an example of how it should look like:
 }
 ```
 
+[Here](https://tgfotet.web.app/?p=qbdetail&id=ocyKeDa5SK5DvEdbAiK1) is the link to the example question bank.
+
 There are six questions in the Question Bank above.
 
 The first one is a single-select multiple choice problem. You must specify the question, choices, and answer (0-indexed).
