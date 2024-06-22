@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-.firebase
+.firebase/*
 src/config/firebase.tsx
 
 # Editor directories and files
