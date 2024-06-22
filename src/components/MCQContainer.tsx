@@ -44,7 +44,7 @@ export const MCQContainer = ({ active, setSolved, setSubmitted, questionData }: 
     };
     return (
         <div>
-            { questionData.question }
+            <div className='text-left'>{ questionData.question }</div>
             <div className='flex flex-col gap-3 py-3'>
                 { questionData.choices.map((choice, i) => (
                     <button key={i} disabled={!active} className='bg-gray-700 rounded-md p-2 text-left' onClick={() => onSelect(i)} style={{backgroundColor: selected[i] ? "#888888" : buttonColor[i]}}>{choice}</button>

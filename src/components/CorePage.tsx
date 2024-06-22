@@ -39,6 +39,11 @@ export const CorePage = () => {
         ls.updateProgress(qBankId, solving.hash, solving.solved, solving.individualProgress);
         nextQuestion();
     }, [submitted]);
+    
+    useEffect(() => {
+        if (!solving) return;
+        ls.updateProgress(qBankId, solving!.hash, solving!.solved, solving!.individualProgress, false);
+    }, [solving]);
 
     const getFile = async () => {
         const storageRef = ref(storage, 'qbank/' + qBankId);

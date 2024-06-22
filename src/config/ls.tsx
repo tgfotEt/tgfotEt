@@ -3,7 +3,12 @@ import { doc, getDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
 import { UserData, QuestionBankMetaData, isMCQ, isFRQ, isFillIn, isTranslate, isMixed,  Mixed, QuestionProgress, Question } from './types';
 import hash from 'object-hash';
 export function getData(): UserData {
-    return JSON.parse(localStorage.getItem('data') || '{}') as UserData;
+    const dat = JSON.parse(localStorage.getItem('data') || '{}');
+    if (!dat || !('qb' in dat)) {
+        setData({ qb: {} } as UserData);
+        return { qb: {} } as UserData;
+    }
+    return dat as UserData;
 }
 
 export function setData(data: UserData) {
@@ -27,14 +32,10 @@ export async function syncDataByTime() {
     }
     const docData = rawData.data() as UserData;
     const userData = getData();
-    const newData = userData;
-    for (const [key, value] of Object.entries(docData.qb)) {
-        if (!(key in userData.qb)) {
+    const newData = docData;
+    for (const [key, value] of Object.entries(userData.qb)) {
+        if (key in docData.qb && value.lastUsed.seconds > docData.qb[key].lastUsed.seconds) {
             newData.qb[key] = value;
-        } else {
-            if (value.lastUsed.seconds > userData.qb[key].lastUsed.seconds) {
-                newData.qb[key] = value;
-            }
         }
     }
     setData(newData);

@@ -32,6 +32,10 @@ export const MixedContainer = ({ setSolving, setSubmitted, questionData }: { set
             const newSolved = newInd.reduce((acc, val) => acc + val, 0)/newInd.length;
             return { ...prev, individualProgress: newInd, solved: newSolved };
         });
+        if(currentSub === mixed.subquestions.length-1 && isTranslate(mixed.subquestions[currentSub])) {
+            onSubmit();
+            return;
+        }
         const actv = Array(mixed.subquestions.length).fill(false);
         if (currentSub === mixed.subquestions.length-1){
             setFinished(true);
@@ -51,8 +55,8 @@ export const MixedContainer = ({ setSolving, setSubmitted, questionData }: { set
                 <div className='absolute inset-0 z-[2]'>
                     <div className='absolute inset-0 flex justify-center top-24'>
                         <div className='bg-gray-700 flex flex-row rounded-2xl p-5 gap-5 w-5/6 h-2/3'>
-                            <div className='w-1/3 text-left'>{mixed.prompt}</div>
-                            <div className='rounded-lg bg-gray-800 p-5 w-2/3 overflow-y-auto'>
+                            <div className='w-1/3 text-left overflow-y-auto'>{mixed.prompt}</div>
+                            <div className='rounded-lg bg-gray-800 p-5 w-2/3 overflow-y-auto flex flex-col gap-5'>
                                 {mixed.subquestions.map((subquestion, i) => {
                                     if (isMCQ(subquestion)) {
                                         return <MCQContainer key={i} active={active[i]} setSolved={setSubSolved} setSubmitted={setSubSubmitted} questionData={subquestion as MCQ} />;
