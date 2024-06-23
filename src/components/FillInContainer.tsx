@@ -118,7 +118,7 @@ export const FillInContainer = ({ solving, setSolving, setSubmitted, questionDat
 
     return (
         <div className='absolute inset-0 flex justify-center items-center z-[2]'>
-            <div className='text-xl font-mono w-2/3 [&_*]:my-1'>
+            <div className='text-xl font-mono w-2/3 h-2/3 overflow-y-auto [&_*]:my-1'>
                 {
                     blanks.map((blank, index) => (
                         <span key={`container-${index}`}>

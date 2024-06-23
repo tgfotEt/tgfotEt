@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ref, getBytes } from 'firebase/storage';
+import { logEvent } from 'firebase/analytics';
 import { useSearchParams } from 'react-router-dom';
-import { storage } from '../config/firebase';
+import { auth, storage, analytics } from '../config/firebase';
 import { LoadingOverlay } from './LoadingOverlay';
 import * as ls from '../config/ls';
 import hash from 'object-hash';
@@ -20,8 +21,10 @@ export const CorePage = () => {
     const nextQuestion = (data = file) => {
         if(!data) return;
         setSubmitted(false);
-        const progress = ls.getData().qb[qBankId].progress;
+        const qb = ls.getData().qb[qBankId];
+        const progress = qb.progress;
         const available = progress.filter((q) => q.solved < 1);
+        logEvent(analytics, 'next_question', { qbName: qb.title, userId: auth.currentUser!.displayName || auth.currentUser!.email});
         if (available.length === 0) {
             saveAndQuit();
             return;

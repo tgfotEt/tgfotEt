@@ -153,5 +153,7 @@ export function updateProgress(qBankId: string, hash: string, solved: number, in
         solved: Math.max(solved, progress[index].solved),
         individualProgress: progress[index].individualProgress.map((value, i) => Math.max(value, individualProgress[i]))
     };
+    data.qb[qBankId].progress = progress;
+    data.qb[qBankId].lastUsed = Timestamp.now();
     setData(data);
 }
