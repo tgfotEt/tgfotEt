@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { Translate } from '../config/types';
+import { printLang } from '../config/lang';
 type TranslateMetaData = { type: string, char: string, newChar?: string };
 type TranslateDistance = { distance: number, sequence: TranslateMetaData[] };
 export const TranslateContainer = ({ active, setSolved, setSubmitted, questionData }: { active: boolean, setSolved: any, setSubmitted: any, questionData: Translate }) => {
@@ -73,7 +74,7 @@ export const TranslateContainer = ({ active, setSolved, setSubmitted, questionDa
                 <>
                     <textarea className='block bg-gray-700 rounded-md p-2 text-left resize-none w-full h-1/2 outline-none' ref={ textArea } disabled={!active} placeholder='Type your translation here'></textarea>
                     <div className='flex justify-end'>
-                        <button disabled={!active} onClick={submit} className='bg-gray-700 rounded-md py-2 px-4 w-fit my-3'>Submit</button>
+                        <button disabled={!active} onClick={submit} className='bg-gray-700 rounded-md py-2 px-4 w-fit my-3'>{printLang('submit')}</button>
                     </div>
                 </>
                 :
@@ -88,8 +89,8 @@ export const TranslateContainer = ({ active, setSolved, setSubmitted, questionDa
                         </div>
                     </div>
                     <div className='flex flex-row justify-end'>
-                    <button onClick={() => setTargetSubmitted(false)} className='bg-gray-700 rounded-md py-2 px-4 w-fit m-3'>Try again</button>
-                    <button onClick={() => {setSubmitted(true); setTargetSubmitted(false);}} className='bg-gray-700 rounded-md py-2 px-4 w-fit my-3'>Next</button>
+                    <button onClick={() => setTargetSubmitted(false)} className='bg-gray-700 rounded-md py-2 px-4 w-fit m-3'>{printLang('try_again')}</button>
+                    <button onClick={() => {setSubmitted(true); setTargetSubmitted(false);}} className='bg-gray-700 rounded-md py-2 px-4 w-fit my-3'>{printLang('next')}</button>
                     </div>
                 </>
             }

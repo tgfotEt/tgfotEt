@@ -6,6 +6,7 @@ import { auth, db, storage } from '../config/firebase';
 import { QuestionBankMetaData } from '../config/types';
 import { LoadingOverlay, ConfirmOverlay } from './LoadingOverlay';
 import * as ls from '../config/ls';
+import { printLang } from '../config/lang';
 
 export const QBankDetailsPage = ({ qBankId }) => {
     const [qBankMetaData, setQBankMetaData] = useState<QuestionBankMetaData>();
@@ -62,9 +63,9 @@ export const QBankDetailsPage = ({ qBankId }) => {
                     <>
                         <div className='grid [grid-template-rows:auto_auto_auto_auto_1fr] gap-2 [&>div]:bg-gray-700 [&>div]:py-2 [&>div]:rounded-md align-middle w-1/2'>
                             <div className='text-3xl py-4'>{qBankMetaData.title}</div>
-                            <div>By: {qBankMetaData.authorname}</div>
-                            <div>Created on {qBankMetaData.createdAt.toDate().toDateString()}</div>
-                            <div>Last updated on {qBankMetaData.updatedAt.toDate().toDateString()}</div>
+                            <div>{printLang('by')}{qBankMetaData.authorname}</div>
+                            <div>{printLang('created_on')}{qBankMetaData.createdAt.toDate().toDateString()}</div>
+                            <div>{printLang('last_updated_on')}{qBankMetaData.updatedAt.toDate().toDateString()}</div>
                             <div>{qBankMetaData.description}</div>
                         </div>
                         <div className='grid gap-2 [&>button]:bg-gray-700 align-middle w-1/5 [&>button]:w-full [&>button]:rounded-md'>
@@ -75,36 +76,36 @@ export const QBankDetailsPage = ({ qBankId }) => {
                                             ? (
                                                 <>
                                                     { !ls.getData().qb[qBankId].progress.every((p) => p.solved === 1) &&
-                                                        <button onClick={setCorePage}>Continue</button>
+                                                        <button onClick={setCorePage}>{printLang('continue')}</button>
                                                     }
-                                                    <button onClick={() => setConfirmRestart(true)}>Restart</button>
+                                                    <button onClick={() => setConfirmRestart(true)}>{printLang('restart')}</button>
                                                     <ConfirmOverlay
-                                                        prompt='Are you sure you want to restart?'
+                                                        prompt={printLang('confirm_restart')}
                                                         onConfirm={ restartQBank }
                                                         state={confirmRestart}
                                                     />
                                                 </>
                                             ) : (
                                                 <>
-                                                    <button onClick={setCorePage}>Start</button>
+                                                    <button onClick={setCorePage}>{printLang('start')}</button>
                                                 </>
                                             )
                                         }
-                                        <button onClick={() => setIsLoading(true)}>Remove from Saved</button>
+                                        <button onClick={() => setIsLoading(true)}>{printLang('remove_from_saved')}</button>
                                         <LoadingOverlay func={removeQBank} state={isLoading}> </LoadingOverlay>
                                     </>
                                 ) : (
                                     <>
-                                        <button onClick={() => setIsLoading(true)}>Add to Saved</button>
+                                        <button onClick={() => setIsLoading(true)}>{printLang('add_to_saved')}</button>
                                         <LoadingOverlay func={downloadQBank} state={isLoading}> </LoadingOverlay>
                                     </>
                                 )
                             }
                             { auth.currentUser!.uid === qBankMetaData.authorid && 
-                                <button onClick={() => setCurrentPage({p:'editqb',id:qBankId})}>Edit</button>
+                                <button onClick={() => setCurrentPage({p:'editqb',id:qBankId})}>{printLang('edit')}</button>
                             }
-                            <button onClick={exportQBank}>Export as JSON</button>
-                            <button onClick={() => setCurrentPage({p:'qbank'})}>Back</button>
+                            <button onClick={exportQBank}>{printLang('export_json')}</button>
+                            <button onClick={() => setCurrentPage({p:'qbank'})}>{printLang('back')}</button>
                         </div>
                     </>
                 }

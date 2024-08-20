@@ -10,6 +10,7 @@ import { QuestionBank, QuestionProgress, Question, FillIn, isFillIn, Combined, M
 import { FillInContainer } from './FillInContainer';
 import { ProgressBar } from './ProgressBar';
 import { MixedContainer } from './MixedContainer';
+import { printLang } from '../config/lang';
 export const CorePage = () => {
     const [currentPage, setCurrentPage] = useSearchParams();
     const qBankId = currentPage.get('id')!;
@@ -109,7 +110,7 @@ export const CorePage = () => {
                         }
                     </>
                 }
-                <button onClick={saveAndQuit} className='m-5 p-3 rounded-md bg-gray-700 z-10 relative'>Save and Quit</button>
+                <button onClick={saveAndQuit} className='m-5 p-3 rounded-md bg-gray-700 z-10 relative'>{printLang('save_and_quit')}</button>
             </LoadingOverlay>
         </div>
     );

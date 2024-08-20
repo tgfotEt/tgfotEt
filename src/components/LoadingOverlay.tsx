@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { printLang } from '../config/lang';
 
 export const LoadingOverlay = ({ func, state=true, children }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -21,16 +22,16 @@ export const LoadingOverlay = ({ func, state=true, children }) => {
                 ? 
                 <div className='fixed inset-0 bg-black bg-opacity-50 z-[1000] flex justify-center items-center'>
                     <div className='bg-gray-700 p-6 rounded-lg'>
-                        <h1 className='text-2xl'>Loading...</h1>
+                        <h1 className='text-2xl'>{printLang('loading')}</h1>
                     </div>
                 </div>
                 : error
                 ? 
                 <div className='fixed inset-0 bg-black bg-opacity-50 z-[1000] flex justify-center items-center'>
                     <div className='bg-red-700 p-6 rounded-lg'>
-                        <h1 className='text-2xl'>Error</h1>
+                        <h1 className='text-2xl'>{printLang('error')}</h1>
                         <p>{error}</p>
-                        <button className='p-2 m-2 bg-red-600 hover:bg-red-500 rounded-md' onClick={() => setError("")}>Close</button>
+                        <button className='p-2 m-2 bg-red-600 hover:bg-red-500 rounded-md' onClick={() => setError("")}>{printLang('close')}</button>
                     </div>
                 </div>
                 : children
@@ -39,7 +40,7 @@ export const LoadingOverlay = ({ func, state=true, children }) => {
     );
 };
 
-export const ConfirmOverlay = ({ prompt, confirmText = 'OK', cancelText = 'Cancel', onConfirm, onCancel=()=>{}, state=true, alert=false }) => {
+export const ConfirmOverlay = ({ prompt, confirmText = printLang('ok'), cancelText = printLang('cancel'), onConfirm, onCancel=()=>{}, state=true, alert=false }) => {
     const [isOpen, setIsOpen] = useState(true);
     return (
         <>

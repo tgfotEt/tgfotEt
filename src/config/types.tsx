@@ -1,9 +1,22 @@
 import { Timestamp } from 'firebase/firestore';
-
+import hash from 'object-hash';
 export type MCQ = {
+    img?: string;
     question: string;
     choices: string[];
     answer: number | number[];
+};
+
+export const MCQtemplate: MCQ = {
+    question: "",
+    choices: ["", "", "", ""],
+    answer: 0
+};
+
+export const MCMQtemplate: MCQ = {
+    question: "",
+    choices: ["", "", "", ""],
+    answer: []
 };
 
 export const isMCQ = (obj: any): boolean => {
@@ -16,8 +29,14 @@ export const isMCQ = (obj: any): boolean => {
 };
 
 export type FRQ = {
+    img?: string;
     question: string;
     answer: string;
+};
+
+export const FRQtemplate: FRQ = {
+    question: "",
+    answer: ""
 };
 
 export const isFRQ = (obj: any): boolean => {
@@ -30,6 +49,10 @@ export type FillIn = {
     sentence: string;
 };
 
+export const FillIntemplate: FillIn = {
+    sentence: ""
+};
+
 export const isFillIn = (obj: any): boolean => {
     return obj && 'sentence' in obj && typeof obj['sentence'] === 'string';
 };
@@ -37,6 +60,11 @@ export const isFillIn = (obj: any): boolean => {
 export type Translate = {
     source: string;
     target: string;
+};
+
+export const TranslateTemplate: Translate = {
+    source: "",
+    target: ""
 };
 
 export const isTranslate = (obj: any): boolean => {
@@ -48,8 +76,14 @@ export const isTranslate = (obj: any): boolean => {
 export type Combined = MCQ | FRQ | Translate;
 
 export type Mixed = {
+    img?: string;
     prompt: string;
     subquestions: Combined[];
+};
+
+export const MixedTemplate: Mixed = {
+    prompt: "",
+    subquestions: []
 };
 
 export const isMixed = (obj: any): boolean => {
@@ -62,15 +96,17 @@ export const isMixed = (obj: any): boolean => {
 
 export const MCQtoMixed = (mcq: MCQ): Mixed => {
     return {
+        img: mcq.img,
         prompt: mcq.question,
-        subquestions: [{ ...mcq, question: "" } as MCQ]
+        subquestions: [{ ...mcq, img: undefined, question: "" } as MCQ]
     }
 };
 
 export const FRQtoMixed = (frq: FRQ): Mixed => {
     return {
+        img: frq.img,
         prompt: frq.question,
-        subquestions: [{ ...frq, question: "" } as FRQ]
+        subquestions: [{ ...frq, img: undefined, question: "" } as FRQ]
     };
 };
 
@@ -102,8 +138,14 @@ export const isQuestion = (obj: any): boolean => {
 export type QuestionBank = {
     title: string;
     description: string;
+    unlisted?: boolean;
+    archived?: boolean;
     questions: Question[];
 };
+
+const hasDuplicates = (arr: any[]): boolean => {
+    return (new Set(arr)).size !== arr.length;
+}
 
 export const isQuestionBank = (obj: any): boolean => {
     return obj && 'title' in obj && 'description' in obj && 'questions' in obj &&
@@ -113,6 +155,7 @@ export const isQuestionBank = (obj: any): boolean => {
         obj['description'].length <= 1000 &&
         Array.isArray(obj['questions']) &&
         obj['questions'].every((question: any) => isQuestion(question)) &&
+        !hasDuplicates(obj['questions'].map((question: any) => hash(question))) &&
         obj['questions'].length > 0 && obj['questions'].length <= 500 &&
         JSON.stringify(obj).length <= 100000;
 }
@@ -125,6 +168,8 @@ export type QuestionBankMetaData = {
     authorid: string;
     authorname: string;
     downloads: number;
+    unlisted: boolean;
+    archived: boolean;
 };
 
 export type QuestionProgress = {

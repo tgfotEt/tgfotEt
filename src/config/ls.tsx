@@ -157,3 +157,12 @@ export function updateProgress(qBankId: string, hash: string, solved: number, in
     data.qb[qBankId].lastUsed = Timestamp.now();
     setData(data);
 }
+
+export function getLang() {
+    return localStorage.getItem('lang') || 'zh-tw';
+}
+
+export function toggleLang() {
+    const lang = getLang();
+    localStorage.setItem('lang', lang === 'en' ? 'zh-tw' : 'en');
+}

@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { ref, getBytes } from 'firebase/storage';
+import { storage } from '../config/firebase';
 import { QuestionProgress, FRQ, MCQ, Mixed, Translate, toMixed, isMCQ, isFRQ, isTranslate } from '../config/types';
 import { MCQContainer } from './MCQContainer';
 import { FRQContainer } from './FRQContainer';
 import { TranslateContainer } from './TranslateContainer';
+import { printLang } from '../config/lang';
 export const MixedContainer = ({ setSolving, setSubmitted, questionData }: { setSolving:any, setSubmitted:any, questionData: MCQ | FRQ | Translate | Mixed }) => {
     const [mixed, setMixed] = useState<Mixed | null>(null);
     const [subSubmitted, setSubSubmitted] = useState(false);
@@ -10,12 +13,22 @@ export const MixedContainer = ({ setSolving, setSubmitted, questionData }: { set
     const [active, setActive] = useState<boolean[]>([]);
     const [subSolved, setSubSolved] = useState(0);
     const [finished, setFinished] = useState(false);
+    const [image, setImage] = useState<string>('');
     const init = () => {
         const mxd=toMixed(questionData);
         setMixed(mxd);
         const actv = Array(mxd.subquestions.length).fill(false);
         actv[0] = true;
         setActive(actv);
+        if ("img" in mxd && mxd.img) {
+            getBytes(ref(storage, 'images/' + mxd.img)).then((data) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    setImage(e.target?.result as string);
+                };
+                reader.readAsDataURL(new Blob([data]));
+            });
+        }
     };
 
     useEffect(() => {
@@ -54,9 +67,12 @@ export const MixedContainer = ({ setSolving, setSubmitted, questionData }: { set
             { mixed && (
                 <div className='absolute inset-0 z-[2]'>
                     <div className='absolute inset-0 flex justify-center top-24'>
-                        <div className='bg-gray-700 flex flex-row rounded-2xl p-5 gap-5 w-5/6 h-2/3'>
-                            <div className='w-1/3 text-left overflow-y-auto'>{mixed.prompt}</div>
-                            <div className='rounded-lg bg-gray-800 p-5 w-2/3 overflow-y-auto flex flex-col gap-5'>
+                        <div className='bg-gray-700 flex flex-row text-sm md:text-base rounded-md p-2 gap-2 md:rounded-2xl md:p-5 md:gap-5 w-[95%] md:w-5/6 h-2/3'>
+                            <div className='w-2/5 text-left overflow-y-auto'>
+                                { image && <img src={image} alt='Question' className='object-contain w-full max-h-[40vh]' /> }
+                                { mixed.prompt }
+                            </div>
+                            <div className='rounded-lg bg-gray-800 p-2 md:p-5 w-3/5 overflow-y-auto flex flex-col gap-2 md:gap-5'>
                                 {mixed.subquestions.map((subquestion, i) => {
                                     if (isMCQ(subquestion)) {
                                         return <MCQContainer key={i} active={active[i]} setSolved={setSubSolved} setSubmitted={setSubSubmitted} questionData={subquestion as MCQ} />;
@@ -69,7 +85,7 @@ export const MixedContainer = ({ setSolving, setSubmitted, questionData }: { set
                             </div>
                         </div>
                     </div>
-                    <button onClick={onSubmit} hidden={!finished} className='absolute top-3/4 left-1/2 -translate-x-1/2 bg-gray-700 rounded-md px-3 py-1'>Next</button>
+                    <button onClick={onSubmit} hidden={!finished} className='absolute top-3/4 left-1/2 -translate-x-1/2 bg-gray-700 rounded-md px-3 py-1'>{printLang('next')}</button>
                 </div>
             )}
         </>

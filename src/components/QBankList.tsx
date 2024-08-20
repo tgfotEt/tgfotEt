@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { db } from "../config/firebase";
 import { QuestionBankMetaData } from "../config/types";
 import { LoadingOverlay } from "./LoadingOverlay";
+import { printLang } from "../config/lang";
 
 export const QBankList = ({ sortBy }) => {
     const [qBankList, setQBankList] = useState<[QuestionBankMetaData, string][]>([]);
@@ -33,17 +34,20 @@ export const QBankList = ({ sortBy }) => {
             <div className='flex flex-col mx-[10%] gap-2'>
                 {
                     qBankList.map((qbank, index) => (
-                        <button className='rounded-md bg-gray-700 p-2 flex flex-row text-left min-h-20 hover:bg-gray-600' key={index} onClick={() => setCurrentPage({ p: 'qbdetail', id: qbank[1] })}>
+                        <button className={`rounded-md p-2 flex flex-row text-left min-h-20 
+                            ${index<qBankList.length-1 && !qbank[0].archived && qBankList[index+1][0].archived ? 'mb-10' : ''}
+                            ${qbank[0].archived ? 'bg-[#111] hover:bg-black' : 'bg-gray-700 hover:bg-gray-600'}`}
+                            key={index} onClick={() => setCurrentPage({ p: 'qbdetail', id: qbank[1] })}>
                             <h2 className='font-bold truncate w-1/3 text-lg'>{qbank[0].title}</h2>
                             <p className='line-clamp-2 w-2/3 italic text-gray-400'>{qbank[0].description}</p>
                         </button>
                     ))
                 }
                 {qBankList.length !== 0 && !allLoaded &&
-                    <button onClick={getQBankList}>Load More</button>
+                    <button onClick={getQBankList}>{printLang('load_more')}</button>
                 }
                 { qBankList.length === 0 &&
-                    <div className='text-gray-400'>No Question Banks found</div>
+                    <div className='text-gray-400'>{printLang('no_qbanks_found')}</div>
                 }
             </div>
         </LoadingOverlay>
